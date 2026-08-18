@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HUMIA Protocol — Human–AI Cooperation for the Web</title>
+  <meta name="description" content="HUMIA is an experimental open protocol giving human-controlled websites and AI agents a common language for identity, access, attribution and reciprocity.">
+  <link rel="canonical" href="https://humiaprotocol.org/">
+  <meta name="theme-color" content="#f3f2ec">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="HUMIA Protocol — Human–AI Cooperation for the Web">
+  <meta property="og:description" content="A common language for human-controlled websites and AI agents to declare, understand and organize the conditions of their cooperation.">
+  <meta property="og:url" content="https://humiaprotocol.org/">
+  <meta property="og:site_name" content="HUMIA Protocol">
+
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/humia.css">
+  <script src="js/humia.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header" data-header>
+    <div class="shell nav-wrap">
+      <a class="brand" href="#top" aria-label="HUMIA Protocol home">
+        <span class="brand-mark" aria-hidden="true">
+          <span></span><i></i><span></span>
+        </span>
+        <span class="brand-word">HUMIA</span>
+        <span class="brand-suffix">Protocol</span>
+      </a>
+
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="main-nav" data-nav-toggle>
+        <span class="sr-only">Toggle navigation</span>
+        <span></span><span></span>
+      </button>
+
+      <nav id="main-nav" class="main-nav" aria-label="Primary" data-nav>
+        <a href="#why">Why HUMIA</a>
+        <a href="#pillars">Principles</a>
+        <a href="#manifest">Manifest</a>
+        <a href="#pilot">Pilot</a>
+        <a class="nav-cta" href="#build">Try HUMIA</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="shell hero-grid">
+        <div class="hero-copy reveal">
+          <div class="eyebrow-row">
+            <span class="status-pill"><span class="status-dot"></span> Draft v0.1</span>
+            <span class="eyebrow">An experimental open protocol</span>
+          </div>
+          <h1>A common language for <span>humans</span> and <span>AI agents.</span></h1>
+          <p class="hero-lede">HUMIA gives human-controlled websites and AI agents a way to declare, understand and organize the conditions of their cooperation.</p>
+
+          <div class="hero-actions">
+            <a class="button button-primary" href="#why">Explore the protocol <span aria-hidden="true">↘</span></a>
+            <a class="button button-quiet" href="#manifest">See an example policy</a>
+          </div>
+
+          <div class="hero-principles" aria-label="HUMIA principles">
+            <span>Identity</span><i></i><span>Access</span><i></i><span>Attribution</span><i></i><span>Reciprocity</span>
+          </div>
+        </div>
+
+        <div class="symbiosis-card reveal" aria-label="Human website and AI agent connected through HUMIA">
+          <div class="orbit-label orbit-label-top">Human-controlled website</div>
+          <div class="symbiosis-stage">
+            <div class="node node-human" aria-hidden="true">
+              <div class="node-core">H</div>
+              <span>Human</span>
+            </div>
+
+            <div class="bridge" aria-hidden="true">
+              <div class="bridge-line"></div>
+              <span class="packet packet-a"></span>
+              <span class="packet packet-b"></span>
+              <div class="protocol-core">
+                <span class="core-kicker">Protocol</span>
+                <strong>HUMIA</strong>
+                <small>cooperation layer</small>
+              </div>
+            </div>
+
+            <div class="node node-ai" aria-hidden="true">
+              <div class="node-core">AI</div>
+              <span>Agent</span>
+            </div>
+          </div>
+          <div class="symbiosis-caption">
+            <span>control</span>
+            <span>↔</span>
+            <span>understanding</span>
+            <span>↔</span>
+            <span>cooperation</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-rule" aria-hidden="true"></div>
+    </section>
+
+    <section class="section section-intro" id="why">
+      <div class="shell split-heading reveal">
+        <div>
+          <p class="section-index">01 / Why HUMIA</p>
+          <h2>The Web needs a cooperation layer.</h2>
+        </div>
+        <div class="section-copy">
+          <p>The Web already has ways to communicate, discover pages and express crawl preferences. AI agents introduce a broader relationship: identity, intended use, attribution, access conditions and measurable reciprocity.</p>
+          <p>HUMIA does not replace <code>robots.txt</code>. It adds a machine-readable layer for richer cooperation.</p>
+        </div>
+      </div>
+
+      <div class="shell protocol-stack reveal" aria-label="Existing web layers and HUMIA">
+        <div class="stack-row">
+          <span class="stack-name">HTTP</span>
+          <span class="stack-role">Communication</span>
+          <span class="stack-note">How systems exchange information</span>
+        </div>
+        <div class="stack-row">
+          <span class="stack-name">Sitemap</span>
+          <span class="stack-role">Discovery</span>
+          <span class="stack-note">Where content can be found</span>
+        </div>
+        <div class="stack-row">
+          <span class="stack-name">robots.txt</span>
+          <span class="stack-role">Crawl preferences</span>
+          <span class="stack-note">Where automated crawlers are invited or discouraged</span>
+        </div>
+        <div class="stack-row stack-row-humia">
+          <span class="stack-name">HUMIA</span>
+          <span class="stack-role">Cooperation</span>
+          <span class="stack-note">Under which conditions humans and AI agents can work together</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-dark" id="pillars">
+      <div class="shell">
+        <div class="section-topline reveal">
+          <p class="section-index">02 / Four principles</p>
+          <p class="microcopy">A small core designed to remain understandable.</p>
+        </div>
+        <div class="pillars-grid">
+          <article class="pillar reveal">
+            <span class="pillar-number">01</span>
+            <div class="pillar-icon" aria-hidden="true"><span></span><span></span></div>
+            <h3>Identity</h3>
+            <p>Who owns the resource? Which agent is requesting it? HUMIA creates room for explicit identity on both sides.</p>
+          </article>
+          <article class="pillar reveal">
+            <span class="pillar-number">02</span>
+            <div class="pillar-icon access" aria-hidden="true"><span></span><span></span><span></span></div>
+            <h3>Access</h3>
+            <p>Which resources can be used, for which purposes, and under what limits? Rules can be clearer than a binary allow or deny.</p>
+          </article>
+          <article class="pillar reveal">
+            <span class="pillar-number">03</span>
+            <div class="pillar-icon attribution" aria-hidden="true"><span></span><span></span></div>
+            <h3>Attribution</h3>
+            <p>Preserve origin, canonical source and provenance so value does not become detached from the humans who created it.</p>
+          </article>
+          <article class="pillar reveal">
+            <span class="pillar-number">04</span>
+            <div class="pillar-icon reciprocity" aria-hidden="true"><span></span><span></span></div>
+            <h3>Reciprocity</h3>
+            <p>Cooperation can be measured and balanced. Reciprocity may mean reporting, better access, attribution or another agreed exchange.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="how">
+      <div class="shell">
+        <div class="split-heading reveal">
+          <div>
+            <p class="section-index">03 / How it works</p>
+            <h2>Declare once. Understand automatically.</h2>
+          </div>
+          <div class="section-copy">
+            <p>A site can publish a HUMIA policy at a predictable location. Compatible agents can discover it, identify themselves and act according to explicit conditions.</p>
+          </div>
+        </div>
+
+        <ol class="flow reveal">
+          <li><span class="flow-index">01</span><strong>Publish</strong><p>The website exposes <code>/.well-known/humia.json</code>.</p></li>
+          <li><span class="flow-index">02</span><strong>Discover</strong><p>An AI agent can read the site’s declared policy.</p></li>
+          <li><span class="flow-index">03</span><strong>Identify</strong><p>The agent can present an identity rather than remain an anonymous crawler.</p></li>
+          <li><span class="flow-index">04</span><strong>Decide</strong><p>Access conditions can produce deterministic allow, limited or deny outcomes.</p></li>
+          <li><span class="flow-index">05</span><strong>Measure</strong><p>Advanced implementations can record usage and reciprocity events.</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section manifest-section" id="manifest">
+      <div class="shell manifest-grid">
+        <div class="manifest-copy reveal">
+          <p class="section-index">04 / The manifest</p>
+          <h2>Human intent, readable by machines.</h2>
+          <p>A HUMIA policy is designed to be discoverable at a standard well-known URL and expressed as explicit structured data.</p>
+          <div class="manifest-path"><span>GET</span><code>/.well-known/humia.json</code></div>
+          <p class="fine-print">Illustrative example only. The authoritative v0.1 schema will be published separately.</p>
+        </div>
+
+        <div class="code-window reveal">
+          <div class="code-toolbar">
+            <div class="code-dots" aria-hidden="true"><i></i><i></i><i></i></div>
+            <span>humia.json</span>
+            <button class="copy-button" type="button" data-copy-code aria-label="Copy example HUMIA manifest">Copy</button>
+          </div>
+          <pre><code data-manifest-code>{
+  "protocol": "HUMIA",
+  "version": "0.1",
+  "status": "draft",
+  "identity": {
+    "name": "Example Publisher",
+    "canonical": "https://example.org/"
+  },
+  "access": {
+    "public_content": "allow",
+    "private_api": "deny"
+  },
+  "attribution": {
+    "required": true,
+    "canonical_url": true
+  },
+  "reciprocity": {
+    "principle": "measurable_reciprocal_access"
+  }
+}</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="section maturity-section" id="levels">
+      <div class="shell">
+        <div class="section-topline reveal">
+          <div>
+            <p class="section-index">05 / Implementation path</p>
+            <h2>Start simple. Add control when it creates value.</h2>
+          </div>
+          <p class="microcopy">Advanced levels remain experimental.</p>
+        </div>
+
+        <div class="maturity-grid">
+          <article class="maturity-card is-current reveal">
+            <span class="maturity-tag">Start here</span>
+            <h3>Basic</h3>
+            <p>Publish a valid policy and make the site’s intentions discoverable.</p>
+            <span class="maturity-feature">Policy · Discovery</span>
+          </article>
+          <article class="maturity-card reveal">
+            <span class="maturity-tag">Experimental</span>
+            <h3>Controlled</h3>
+            <p>Add agent identity, quotas and deterministic access enforcement.</p>
+            <span class="maturity-feature">Identity · Gateway · Limits</span>
+          </article>
+          <article class="maturity-card reveal">
+            <span class="maturity-tag">Experimental</span>
+            <h3>Measured</h3>
+            <p>Record verifiable events and understand how automated agents use resources.</p>
+            <span class="maturity-feature">Events · Analytics</span>
+          </article>
+          <article class="maturity-card reveal">
+            <span class="maturity-tag">Roadmap</span>
+            <h3>Reciprocal</h3>
+            <p>Support explicit exchanges without forcing a single commercial model.</p>
+            <span class="maturity-feature">Reporting · Agreements · Exchange</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section pilot-section" id="pilot">
+      <div class="shell pilot-grid">
+        <div class="pilot-visual reveal" aria-hidden="true">
+          <div class="pilot-window">
+            <div class="pilot-url"><span></span> hangarrc.com/.well-known/humia.json</div>
+            <div class="pilot-data">
+              <span><i>protocol</i><b>HUMIA</b></span>
+              <span><i>version</i><b>0.1</b></span>
+              <span><i>status</i><b>draft</b></span>
+              <span><i>type</i><b>ecommerce</b></span>
+              <span><i>gateway</i><b>false</b></span>
+              <span><i>settlement</i><b>false</b></span>
+            </div>
+          </div>
+        </div>
+        <div class="pilot-copy reveal">
+          <p class="section-index">06 / Early public pilot</p>
+          <h2>Start with the real Web.</h2>
+          <p><strong>HangarRC</strong>, an ecommerce website, is being used as an early public pilot for HUMIA discovery and policy declaration.</p>
+          <p>Its current draft policy distinguishes public catalog content from private areas, requests attribution and declares measurable reciprocal access as a principle.</p>
+          <div class="truth-box">
+            <strong>No adoption claim.</strong>
+            <p>The presence of a HUMIA manifest does not imply that any AI company or crawler currently reads, supports or honors HUMIA.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section build-section" id="build">
+      <div class="shell build-shell">
+        <div class="build-heading reveal">
+          <p class="section-index">07 / Make it usable</p>
+          <h2>HUMIA should be easier to adopt than to ignore.</h2>
+          <p>The next tools will help website owners create and verify a policy without needing to understand the full specification.</p>
+        </div>
+
+        <div class="tool-grid">
+          <article class="tool-card reveal">
+            <div class="tool-icon" aria-hidden="true">＋</div>
+            <span class="tool-state">Coming soon</span>
+            <h3>Generate your HUMIA policy</h3>
+            <p>Answer a few questions about access, usage, attribution and reciprocity. Export a valid <code>humia.json</code>.</p>
+            <span class="tool-link" aria-disabled="true">Policy Builder <span>↗</span></span>
+          </article>
+          <article class="tool-card reveal">
+            <div class="tool-icon tool-icon-check" aria-hidden="true">✓</div>
+            <span class="tool-state">Coming soon</span>
+            <h3>Validate a HUMIA website</h3>
+            <p>Enter a domain. Check discovery, syntax, version, identity and policy rules with explainable results.</p>
+            <span class="tool-link" aria-disabled="true">Website Validator <span>↗</span></span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section open-section" id="open">
+      <div class="shell open-grid reveal">
+        <div>
+          <p class="section-index">08 / Open by design</p>
+          <h2>A protocol should not need to own the relationship.</h2>
+        </div>
+        <div class="open-copy">
+          <p>HUMIA is being designed around neutrality, portability, interoperability and independent implementations.</p>
+          <p>It should be possible for publishers and AI operators to cooperate directly. HUMIA describes the language of that relationship; it does not need to become the marketplace, bank or gatekeeper between them.</p>
+          <div class="values-row">
+            <span>Neutral</span><span>Portable</span><span>Interoperable</span><span>Measurable</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="closing" aria-labelledby="closing-title">
+      <div class="shell closing-inner reveal">
+        <div class="closing-mark" aria-hidden="true"><span></span><i></i><span></span></div>
+        <p class="section-index">A better relationship with machines starts with explicit human intent.</p>
+        <h2 id="closing-title">The Web was built for people.<br>AI is becoming part of it.<br><span>Let them cooperate.</span></h2>
+        <a class="button button-primary button-light" href="#top">HUMIA Protocol · Draft v0.1 <span aria-hidden="true">↑</span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-grid">
+      <div>
+        <a class="brand footer-brand" href="#top">
+          <span class="brand-mark" aria-hidden="true"><span></span><i></i><span></span></span>
+          <span class="brand-word">HUMIA</span>
+          <span class="brand-suffix">Protocol</span>
+        </a>
+        <p>An experimental open protocol for human–AI cooperation on the Web.</p>
+      </div>
+      <div class="footer-meta">
+        <span>Draft v0.1</span>
+        <span>humiaprotocol.org</span>
+        <span>2026</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

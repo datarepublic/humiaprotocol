@@ -1,0 +1,20 @@
+{
+  "protocol": "HUMIA",
+  "version": "0.1",
+  "status": "draft",
+  "identity": {
+    "name": "Example Publisher",
+    "canonical": "https://example.org/"
+  },
+  "access": {
+    "public_content": "allow",
+    "private_api": "deny"
+  },
+  "attribution": {
+    "required": true,
+    "canonical_url": true
+  },
+  "reciprocity": {
+    "principle": "measurable_reciprocal_access"
+  }
+}

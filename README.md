@@ -15,6 +15,11 @@ HUMIA Protocol is published as an individual IETF Internet-Draft:
 
 Publication as an Internet-Draft does **not** imply IETF endorsement or standards status.
 
+
+## Interoperability
+
+HUMIA Protocol is designed to complement, not replace, neighboring Web and AI mechanisms. The current scope and planned boundaries with REP, IETF AIPREF and W3C A2WF are documented in [`docs/INTEROPERABILITY.md`](docs/INTEROPERABILITY.md).
+
 ## Public implementation
 
 - **Website:** https://humiaprotocol.org/

@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
 
+# HUMIA Protocol discovery (experimental)
+Humia: https://humiaprotocol.org/.well-known/humia.json
+
 Sitemap: https://humiaprotocol.org/sitemap.xml

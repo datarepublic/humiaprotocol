@@ -10,3 +10,17 @@ These guardrails are intended to protect credibility while HUMIA is still experi
 - Keep payment, settlement and commercial exchanges optional and outside the mandatory core.
 - Do not present illustrative example manifests as the authoritative schema.
 - Keep the protocol neutral between AI companies, publishers, business models and implementation vendors.
+
+- Describe `Humia:` in robots.txt as an experimental discovery extension, not a standardized robots.txt directive.
+- Do not claim that existing crawlers read `Humia:` unless direct evidence exists.
+- Do not describe `/.well-known/humia.json` as IANA-registered until a registration actually exists.
+
+## Generator V0 guardrails
+
+- No account, email, captcha, cookies, analytics, backend or remote form submission.
+- All generation happens locally in the browser.
+- Balanced is the default preset.
+- Training is never enabled by a default preset in Generator V0.
+- Generated output must remain visibly labeled as HUMIA Protocol v0.3 Draft / experimental.
+- The generator must not claim that robots or AI providers will honor the generated policy.
+- The generator must not overwrite or generate replacements for existing robots.txt Allow/Disallow rules; it emits only the HUMIA discovery snippet.

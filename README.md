@@ -2,30 +2,43 @@
 
 HUMIA is an experimental open protocol for cooperation between human-controlled websites and AI agents.
 
-This repository is intentionally starting small. The current public website is a static V0 designed for `humiaprotocol.org`. It introduces the protocol without claiming adoption by AI operators.
+Current public candidate: **HUMIA Protocol v0.3 Draft**.
 
-## Current structure
+## V0 website
 
-- `site/` — static public website (HTML/CSS/vanilla JS)
-- `examples/` — illustrative HUMIA examples
-- `spec/v0.1/` — reserved for the audited v0.1 specification
-- `schemas/` — reserved for audited schemas
-- `docs/` — reserved for protocol documentation
-- `tests/` — reserved for validation and regression tests
+The public site is deliberately static and dependency-free:
 
-## Local preview
+- `site/index.html`
+- `site/css/humia.css`
+- `site/js/humia.js`
+- `site/assets/`
+- `site/.well-known/humia.json`
+- `site/spec/v0.3/`
 
-```bash
-cd site
-python3 -m http.server 8080
-```
+## Generator V0
 
-Then open `http://localhost:8080`.
+The generator runs entirely in the user's browser. It requires no account, backend, email, analytics or form submission. It creates:
 
-## Deployment target
+1. a `robots.txt` HUMIA discovery snippet;
+2. a downloadable `humia.json` draft.
 
-The V0 is designed to be uploaded as static files to the document root of the HUMIA Protocol hosting account.
+Default preset: **Balanced**.
 
 ## Status
 
-HUMIA Protocol v0.1 is a draft. The website, examples and terminology may evolve as the specification is audited and extracted from earlier prototype work.
+Experimental. HUMIA is not an IETF standard, is not currently registered in the IANA Well-Known URIs registry, and no AI provider is claimed to support it.
+
+## Beginner-first installation
+
+The public site now includes a plain-language installation guide for non-technical webmasters:
+
+1. add the generated HUMIA discovery lines to the existing `/robots.txt`;
+2. create `/.well-known/` at the public web root and upload `humia.json`;
+3. open both public URLs in a browser to verify publication.
+
+The homepage also carries the project line: **“The Web has a language for crawling. It needs a language for cooperation.”**
+
+
+## Plain-language policy explanation
+
+Generator V0 also translates the generated machine policy into a short human-readable summary. It explains the selected permissions for user assistance, search/retrieval, bulk crawling, training, attribution and usage reporting, and shows both public URLs to verify after installation.

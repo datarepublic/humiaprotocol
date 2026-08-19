@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Optional HUMIA discovery bridge
+Humia: https://example.org/.well-known/humia.json
+
+Sitemap: https://example.org/sitemap.xml

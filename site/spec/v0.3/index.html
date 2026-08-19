@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HUMIA Protocol v0.3 — Candidate Specification</title>
+  <meta name="description" content="HUMIA Protocol v0.3 candidate specification for human-controlled websites and AI agents.">
+  <link rel="canonical" href="https://humiaprotocol.org/spec/v0.3/">
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../../css/humia.css">
+  <style>
+    body{padding-top:90px}.spec-doc{width:min(calc(100% - 40px),900px);margin:0 auto;padding:50px 0 100px}.spec-doc header{border-bottom:1px solid var(--line);padding-bottom:36px;margin-bottom:42px}.spec-doc h1{font-size:clamp(3rem,7vw,6rem);line-height:.95;letter-spacing:-.055em;margin:10px 0 24px}.spec-doc h2{font-size:2rem;letter-spacing:-.035em;margin:54px 0 14px}.spec-doc h3{margin-top:28px}.spec-doc p,.spec-doc li{color:var(--ink-soft)}.spec-doc code{color:var(--ink)}.spec-doc pre{background:var(--night);color:#dce7e1;padding:20px;border-radius:16px;overflow:auto;font-size:12px}.spec-meta{display:flex;gap:8px;flex-wrap:wrap}.spec-meta span{border:1px solid var(--line-strong);border-radius:999px;padding:7px 10px;font-size:9px;text-transform:uppercase;letter-spacing:.08em}.spec-warning{border-left:3px solid var(--ink);padding:4px 0 4px 18px;margin:28px 0}.spec-doc table{width:100%;border-collapse:collapse}.spec-doc th,.spec-doc td{text-align:left;border-bottom:1px solid var(--line);padding:12px 8px;vertical-align:top}.spec-doc th{font-size:10px;text-transform:uppercase;letter-spacing:.08em}.back{display:inline-flex;text-decoration:none;font-size:12px;margin-bottom:36px}.iana-box{border:1px solid var(--line-strong);border-radius:18px;padding:22px;margin-top:24px;background:rgba(255,255,255,.25)}
+  </style>
+</head>
+<body>
+  <main class="spec-doc">
+    <a class="back" href="../../">← HUMIA Protocol</a>
+    <header>
+      <div class="spec-meta"><span>Candidate Draft</span><span>Version 0.3</span><span>19 August 2026</span></div>
+      <h1>HUMIA Protocol v0.3</h1>
+      <p>A candidate specification for declaring how human-controlled websites and AI agents may cooperate.</p>
+      <div class="spec-warning"><strong>Experimental.</strong> HUMIA is not an IETF standard and <code>humia.json</code> is not currently registered in the IANA Well-Known URIs registry.</div>
+    </header>
+
+    <h2>1. Abstract</h2>
+    <p>HUMIA defines a machine-readable policy document through which an origin can express identity, resource access, intended AI usage, attribution preferences and reciprocity preferences. The protocol is designed to complement existing Web mechanisms rather than replace them.</p>
+
+    <h2>2. Scope and terminology</h2>
+    <p><strong>Publisher</strong> means the operator responsible for the Web origin. <strong>Agent</strong> means automated software acting autonomously or on behalf of a user. <strong>Policy</strong> means the JSON representation served from the HUMIA well-known location.</p>
+    <p>HUMIA distinguishes <strong>access</strong> (which resources may be retrieved) from <strong>usage</strong> (what an agent may do with retrieved content).</p>
+
+    <h2>3. Discovery</h2>
+    <p>The canonical candidate location is:</p>
+    <pre><code>https://example.org/.well-known/humia.json</code></pre>
+    <p>An origin MAY additionally advertise this location in <code>/robots.txt</code> using an experimental record:</p>
+    <pre><code>Humia: https://example.org/.well-known/humia.json</code></pre>
+    <p>The <code>Humia:</code> record is optional. It MUST NOT change the meaning of <code>Allow</code> or <code>Disallow</code> rules. Agents that do not understand it may ignore it.</p>
+
+    <h2>4. Retrieval and representation</h2>
+    <ul>
+      <li>Clients retrieve the policy using HTTP GET.</li>
+      <li>HTTPS is the preferred scheme for public deployment.</li>
+      <li>The representation is UTF-8 JSON and SHOULD be served as <code>application/json</code>.</li>
+      <li>The policy applies to the origin that serves it unless a future specification explicitly defines narrower scope.</li>
+    </ul>
+
+    <h2>5. Core document</h2>
+    <pre><code>{
+  "protocol": "HUMIA",
+  "version": "0.3",
+  "status": "draft",
+  "identity": { "canonical": "https://example.org/" },
+  "access": { "public_content": "allow" },
+  "usage": {
+    "user_assistance": "allow",
+    "search_retrieval": "allow",
+    "bulk_crawl": "deny",
+    "training": "deny"
+  },
+  "attribution": {
+    "required": true,
+    "canonical_url": true
+  },
+  "reciprocity": {
+    "usage_reporting": "requested"
+  }
+}</code></pre>
+
+    <h2>6. Usage purposes</h2>
+    <table>
+      <thead><tr><th>Purpose</th><th>Meaning in this draft</th></tr></thead>
+      <tbody>
+        <tr><td><code>user_assistance</code></td><td>Targeted retrieval to answer or assist a user's request.</td></tr>
+        <tr><td><code>search_retrieval</code></td><td>Finding, indexing or retrieving public content for search-like use.</td></tr>
+        <tr><td><code>bulk_crawl</code></td><td>Collection of content at scale rather than targeted retrieval.</td></tr>
+        <tr><td><code>training</code></td><td>Use of content for model training or model-weight improvement.</td></tr>
+      </tbody>
+    </table>
+
+    <h2>7. Attribution and reciprocity</h2>
+    <p>Attribution expresses whether preservation of the canonical source is requested as a condition of cooperation. Reciprocity is broader than payment: it may include reporting, structured access, service credits, direct agreements or other mutually accepted exchanges in later extensions.</p>
+
+    <h2>8. Fallback behavior</h2>
+    <p>Absence, invalidity or an unsupported HUMIA version MUST NOT be interpreted as additional permission. Existing Web controls, applicable law, contracts and technical access controls continue to apply independently.</p>
+
+    <h2>9. Security considerations</h2>
+    <p>A HUMIA document is public metadata, not an authentication or authorization mechanism by itself. Publishers MUST NOT place secrets, credentials or non-public endpoint details in it. A policy declaration cannot replace server-side access controls. Clients should apply normal limits to JSON size, redirects and parsing.</p>
+
+    <h2>10. Privacy considerations</h2>
+    <p>The core policy does not require personal data. Agent identity, event reporting and analytics are separate capabilities and should minimize personal data and follow applicable privacy law.</p>
+
+    <h2>11. Versioning</h2>
+    <p>Clients should treat unsupported major policy semantics conservatively. This v0.3 document is a candidate draft and may change before a stable 1.0 specification.</p>
+
+    <h2>12. IANA considerations</h2>
+    <p>This candidate is being prepared for a possible provisional registration request in the IANA Well-Known URIs registry. No registration is claimed by this document.</p>
+    <div class="iana-box">
+      <p><strong>Candidate registration data</strong></p>
+      <p><code>URI suffix:</code> humia.json<br>
+      <code>Change controller:</code> HUMIA Protocol<br>
+      <code>Specification:</code> https://humiaprotocol.org/spec/v0.3/<br>
+      <code>Status:</code> provisional<br>
+      <code>Representation:</code> application/json<br>
+      <code>URI scheme:</code> https (candidate deployment profile)</p>
+    </div>
+
+    <h2>13. References</h2>
+    <ul>
+      <li><a href="https://www.rfc-editor.org/rfc/rfc8615.html">RFC 8615 — Well-Known Uniform Resource Identifiers (URIs)</a></li>
+      <li><a href="https://www.rfc-editor.org/rfc/rfc9309.html">RFC 9309 — Robots Exclusion Protocol</a></li>
+    </ul>
+
+    <h2>14. Change control and feedback</h2>
+    <p>HUMIA Protocol is currently an experimental open project. Change-control details and a public feedback process will be formalized before an IANA registration request.</p>
+  </main>
+</body>
+</html>

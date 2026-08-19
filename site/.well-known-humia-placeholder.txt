@@ -1,2 +1,0 @@
-The HUMIA Protocol website's own authoritative /.well-known/humia.json should be added only after the v0.1 schema and policy are audited.
-This placeholder is intentionally not deployed at /.well-known/humia.json.

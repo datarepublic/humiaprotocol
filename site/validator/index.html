@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HUMIA Validator — Check a HUMIA Protocol policy</title>
+  <meta name="description" content="Validate a website's HUMIA Protocol v0.3 policy and optional robots.txt discovery record.">
+  <link rel="canonical" href="https://humiaprotocol.org/validator/">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../css/humia.css">
+  <link rel="stylesheet" href="validator.css">
+  <script src="validator.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header is-scrolled">
+    <div class="shell nav-wrap">
+      <a class="brand" href="../" aria-label="HUMIA Protocol home">
+        <span class="brand-mark" aria-hidden="true">
+          <span></span><i></i><span></span>
+        </span>
+        <span class="brand-word">HUMIA</span>
+        <span class="brand-suffix">Protocol</span>
+      </a>
+      <nav class="main-nav validator-nav" aria-label="Validator navigation">
+        <a href="../">Home</a>
+        <a href="../spec/v0.3/">Spec v0.3</a>
+        <a class="nav-cta" href="../#generator">Generate</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="validator-page">
+    <section class="shell validator-hero">
+      <p class="section-index">HUMIA / Validator V0</p>
+      <h1>Validate a HUMIA policy.</h1>
+      <p class="validator-lede">Enter a public website origin. The validator checks the canonical <code>/.well-known/humia.json</code> policy against HUMIA Protocol v0.3 and inspects the optional <code>Humia:</code> discovery record in <code>/robots.txt</code>.</p>
+
+      <div class="validator-grid">
+        <form class="validator-form" data-validator-form novalidate>
+          <label for="validator-origin">Website origin</label>
+          <p>Use the public HTTPS origin only — no path.</p>
+          <div class="validator-input-row">
+            <input id="validator-origin" name="origin" type="url" inputmode="url" autocomplete="url" placeholder="https://example.org" required data-validator-origin>
+            <button class="button button-primary" type="submit">Validate <span aria-hidden="true">↘</span></button>
+          </div>
+          <p class="field-error" data-validator-error role="alert"></p>
+          <p class="validator-privacy">No account · no storage · fixed public HUMIA endpoints only</p>
+        </form>
+
+        <aside class="validator-scope">
+          <span class="generator-status">Experimental · v0.3 Draft</span>
+          <h2>What is checked?</h2>
+          <ul>
+            <li>HTTPS policy retrieval</li>
+            <li>JSON syntax and media type</li>
+            <li><code>protocol: "HUMIA"</code></li>
+            <li><code>version: "0.3"</code></li>
+            <li>Canonical origin identity</li>
+            <li>Defined access and usage values</li>
+            <li>Attribution and reciprocity fields</li>
+            <li>Optional robots.txt discovery</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <section class="shell validator-results" aria-live="polite">
+      <div class="validator-empty" data-validator-empty>
+        <strong>No site checked yet.</strong>
+        <p>The result will distinguish protocol errors from optional warnings. A missing <code>Humia:</code> robots.txt line does not make a HUMIA policy invalid.</p>
+      </div>
+
+      <div class="validator-loading" data-validator-loading hidden>
+        <strong>Checking the public HUMIA endpoints…</strong>
+        <p>This usually requires two HTTPS requests.</p>
+      </div>
+
+      <div data-validator-results hidden>
+        <div class="validator-summary" data-validator-summary>
+          <span class="validator-summary-mark" data-validator-summary-mark></span>
+          <div>
+            <p class="section-index" data-validator-summary-kicker>Result</p>
+            <h2 data-validator-summary-title></h2>
+            <p data-validator-summary-text></p>
+          </div>
+        </div>
+
+        <div class="validator-meta">
+          <div>
+            <span>Policy</span>
+            <a href="#" target="_blank" rel="noopener noreferrer" data-validator-policy-url></a>
+          </div>
+          <div>
+            <span>Draft</span>
+            <strong>HUMIA Protocol v0.3</strong>
+          </div>
+        </div>
+
+        <ol class="validator-checks" data-validator-checks></ol>
+
+        <p class="validator-note">This validator is an experimental implementation aid. It does not provide legal advice, authorization, certification, or an IETF conformance designation.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="validator-footer">
+    <div class="shell">
+      <span>HUMIA Protocol</span>
+      <a href="../">humiaprotocol.org</a>
+    </div>
+  </footer>
+</body>
+</html>

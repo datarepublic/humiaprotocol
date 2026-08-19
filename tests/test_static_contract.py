@@ -10,6 +10,9 @@ index = (SITE / "index.html").read_text(encoding="utf-8")
 robots = (SITE / "robots.txt").read_text(encoding="utf-8")
 policy = json.loads((SITE / ".well-known" / "humia.json").read_text(encoding="utf-8"))
 js = (SITE / "js" / "humia.js").read_text(encoding="utf-8")
+validator_index = (SITE / "validator" / "index.html").read_text(encoding="utf-8")
+validator_js = (SITE / "validator" / "validator.js").read_text(encoding="utf-8")
+validator_php = (SITE / "validator" / "validate.php").read_text(encoding="utf-8")
 
 assert policy["protocol"] == "HUMIA"
 assert policy["version"] == "0.3"
@@ -29,6 +32,17 @@ assert "not_requested" not in js
 assert '"principle": "measurable_reciprocal_access"' not in index
 assert '"usage_reporting": "requested"' in index
 assert "form action=" not in index.lower()
+assert 'href="validator/"' in index
+assert 'data-validator-form' in validator_index
+assert "fetch('validate.php'" in validator_js
+assert "/.well-known/humia.json" in validator_php
+assert "/robots.txt" in validator_php
+assert "FILTER_FLAG_NO_PRIV_RANGE" in validator_php
+assert "FILTER_FLAG_NO_RES_RANGE" in validator_php
+assert "CURLOPT_RESOLVE" in validator_php
+assert "CURLOPT_FOLLOWLOCATION => false" in validator_php
+assert "CURLOPT_PROTOCOLS => CURLPROTO_HTTPS" in validator_php
+assert "CURLOPT_FOLLOWLOCATION => true" not in validator_php
 assert not re.search(r'<script[^>]+src=["\']https?://', index, re.I)
 assert not re.search(r'<link[^>]+rel=["\'](?:stylesheet|preload|icon)["\'][^>]+href=["\']https?://', index, re.I)
 

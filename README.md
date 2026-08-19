@@ -1,8 +1,25 @@
 # HUMIA Protocol
 
-HUMIA is an experimental open protocol for cooperation between human-controlled websites and AI agents.
+> **The Web has a language for crawling. It needs a language for cooperation.**
 
-Current public candidate: **HUMIA Protocol v0.3 Draft**.
+HUMIA is an experimental open, website-first protocol for cooperation between human-controlled websites and AI agents.
+
+## IETF Internet-Draft
+
+HUMIA Protocol is published as an individual IETF Internet-Draft:
+
+- **Title:** *HUMIA: A Website-First Protocol for Human-AI Cooperation*
+- **Draft:** `draft-treneule-humia-protocol-00`
+- **Datatracker:** https://datatracker.ietf.org/doc/draft-treneule-humia-protocol/
+- **HTML:** https://www.ietf.org/archive/id/draft-treneule-humia-protocol-00.html
+
+Publication as an Internet-Draft does **not** imply IETF endorsement or standards status.
+
+## Public implementation
+
+- **Website:** https://humiaprotocol.org/
+- **Canonical policy:** https://humiaprotocol.org/.well-known/humia.json
+- **Current public candidate:** **HUMIA Protocol v0.3 Draft**
 
 ## V0 website
 

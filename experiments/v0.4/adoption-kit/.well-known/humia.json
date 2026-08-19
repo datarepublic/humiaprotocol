@@ -1,0 +1,26 @@
+{
+  "protocol": "HUMIA",
+  "version": "0.3",
+  "status": "draft",
+  "identity": {
+    "name": "YOUR SITE NAME",
+    "canonical": "https://example.com/"
+  },
+  "access": {
+    "public_content": "allow",
+    "private_api": "deny"
+  },
+  "usage": {
+    "user_assistance": "allow",
+    "search_retrieval": "allow",
+    "bulk_crawl": "deny",
+    "training": "deny"
+  },
+  "attribution": {
+    "required": true,
+    "canonical_url": true
+  },
+  "reciprocity": {
+    "usage_reporting": "requested"
+  }
+}

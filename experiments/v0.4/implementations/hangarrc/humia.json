@@ -1,0 +1,30 @@
+{
+  "protocol": "HUMIA",
+  "version": "0.4",
+  "status": "experimental",
+  "identity": {
+    "name": "HangarRC",
+    "canonical": "https://hangarrc.com/"
+  },
+  "standards": {
+    "crawl": {
+      "name": "REP",
+      "reference": "RFC9309",
+      "location": "/robots.txt"
+    },
+    "ai_usage": {
+      "name": "AIPREF",
+      "status": "experimental",
+      "vocabulary": "draft-ietf-aipref-vocab",
+      "discovery": [
+        "robots.txt:Content-Usage"
+      ]
+    }
+  },
+  "attribution": {
+    "canonical_url": true
+  },
+  "reciprocity": {
+    "usage_reporting": "requested"
+  }
+}

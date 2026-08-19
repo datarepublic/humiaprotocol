@@ -25,6 +25,9 @@ assert 'No account. No email. No upload.' in index
 assert 'spec/v0.3/' in index
 assert (SITE / "spec" / "v0.3" / "index.html").exists()
 assert "fetch(" not in js and "XMLHttpRequest" not in js
+assert "not_requested" not in js
+assert '"principle": "measurable_reciprocal_access"' not in index
+assert '"usage_reporting": "requested"' in index
 assert "form action=" not in index.lower()
 assert not re.search(r'<script[^>]+src=["\']https?://', index, re.I)
 assert not re.search(r'<link[^>]+rel=["\'](?:stylesheet|preload|icon)["\'][^>]+href=["\']https?://', index, re.I)

@@ -117,7 +117,7 @@
 
   const buildPolicy = (origin) => {
     const canonical = `${origin}/`;
-    return {
+    const policy = {
       protocol: 'HUMIA',
       version: '0.3',
       status: 'draft',
@@ -136,11 +136,14 @@
       attribution: {
         required: form.elements.attribution.checked,
         canonical_url: true
-      },
-      reciprocity: {
-        usage_reporting: form.elements.reporting.checked ? 'requested' : 'not_requested'
       }
     };
+    if (form.elements.reporting.checked) {
+      policy.reciprocity = {
+        usage_reporting: 'requested'
+      };
+    }
+    return policy;
   };
 
   const renderGenerator = (origin) => {
@@ -166,7 +169,7 @@
       policy.attribution.required
         ? 'Source attribution is required and should preserve the canonical URL.'
         : 'Source attribution is not required by this policy.',
-      policy.reciprocity.usage_reporting === 'requested'
+      policy.reciprocity?.usage_reporting === 'requested'
         ? 'Usage reporting is requested when the agent supports it.'
         : 'Usage reporting is not requested.'
     ];

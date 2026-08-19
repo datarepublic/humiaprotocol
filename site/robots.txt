@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
+Content-Usage: train-ai=n, search=y
 
 # HUMIA Protocol discovery (experimental)
 Humia: https://humiaprotocol.org/.well-known/humia.json

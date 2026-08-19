@@ -92,7 +92,7 @@
     if (!value) throw new Error('Enter your website domain.');
     const withScheme = /^[a-z][a-z0-9+.-]*:\/\//i.test(value) ? value : `https://${value}`;
     const url = new URL(withScheme);
-    if (!['http:', 'https:'].includes(url.protocol)) throw new Error('Use an http or https website URL.');
+    if (url.protocol !== 'https:') throw new Error('Use an https website URL.');
     if (!url.hostname || url.username || url.password) throw new Error('Enter a public website origin.');
     if (url.pathname !== '/' || url.search || url.hash) throw new Error('Enter only the site origin, for example https://example.org.');
     return `${url.protocol}//${url.host}`;

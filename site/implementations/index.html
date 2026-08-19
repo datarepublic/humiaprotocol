@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HUMIA Protocol — Implementations</title>
+  <meta name="description" content="Public HUMIA Protocol implementations and deployment status.">
+  <link rel="canonical" href="https://humiaprotocol.org/implementations/">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../css/humia.css">
+  <link rel="stylesheet" href="implementations.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header is-scrolled">
+    <div class="shell nav-wrap">
+      <a class="brand" href="../" aria-label="HUMIA Protocol home">
+        <span class="brand-mark" aria-hidden="true">
+          <span></span><i></i><span></span>
+        </span>
+        <span class="brand-word">HUMIA</span>
+        <span class="brand-suffix">Protocol</span>
+      </a>
+      <nav class="main-nav implementations-nav" aria-label="Implementations navigation">
+        <a href="../">Home</a>
+        <a href="../validator/">Validator</a>
+        <a href="../spec/v0.3/">Spec v0.3</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="implementations-page">
+    <section class="shell implementations-hero">
+      <p class="section-index">HUMIA / Implementations</p>
+      <h1>Tested on the real Web.</h1>
+      <p class="implementations-lede">HUMIA Protocol v0.3 is experimental. This page records public deployments used to test discovery, policy semantics and deployment ergonomics.</p>
+      <p class="implementations-note"><strong>Validated</strong> below means the public policy passed the HUMIA Validator V0 checks for draft v0.3. It is not an IETF certification or endorsement.</p>
+    </section>
+
+    <section class="shell implementations-list" aria-label="HUMIA implementations">
+      <article class="implementation-card">
+        <div class="implementation-topline">
+          <span class="implementation-status is-live">Live · Validated</span>
+          <span class="implementation-version">HUMIA v0.3</span>
+        </div>
+        <h2>HUMIA Protocol</h2>
+        <p class="implementation-type">Reference deployment</p>
+        <p>The protocol website publishes the canonical v0.3 example policy and the public validator used to test implementations.</p>
+        <dl>
+          <div><dt>Origin</dt><dd><a href="https://humiaprotocol.org/">humiaprotocol.org</a></dd></div>
+          <div><dt>Policy</dt><dd><a href="https://humiaprotocol.org/.well-known/humia.json">/.well-known/humia.json</a></dd></div>
+          <div><dt>Discovery</dt><dd><code>Humia:</code> record present in robots.txt</dd></div>
+        </dl>
+      </article>
+
+      <article class="implementation-card">
+        <div class="implementation-topline">
+          <span class="implementation-status is-live">Live · Validated</span>
+          <span class="implementation-version">HUMIA v0.3</span>
+        </div>
+        <h2>HangarRC</h2>
+        <p class="implementation-type">E-commerce pilot</p>
+        <p>HangarRC is a public e-commerce deployment. On 19 August 2026 its earlier HUMIA v0.1 policy was migrated to v0.3 and passed the public Validator V0 checks.</p>
+        <dl>
+          <div><dt>Origin</dt><dd><a href="https://hangarrc.com/">hangarrc.com</a></dd></div>
+          <div><dt>Policy</dt><dd><a href="https://hangarrc.com/.well-known/humia.json">/.well-known/humia.json</a></dd></div>
+          <div><dt>Profile</dt><dd>User assistance and search/retrieval allowed; bulk crawl and training denied.</dd></div>
+        </dl>
+      </article>
+
+      <article class="implementation-card is-planned">
+        <div class="implementation-topline">
+          <span class="implementation-status">Planned</span>
+          <span class="implementation-version">Not yet claimed live</span>
+        </div>
+        <h2>DataRepublic</h2>
+        <p class="implementation-type">Data / AI platform</p>
+        <p>A DataRepublic deployment is planned as a broader real-world implementation. It will only be marked live here after its public HUMIA endpoint is deployed and validated.</p>
+      </article>
+    </section>
+
+    <section class="shell implementations-callout">
+      <div>
+        <p class="section-index">Validate your deployment</p>
+        <h2>Already publishing HUMIA?</h2>
+        <p>Run the public validator against your HTTPS origin and check the v0.3 policy, canonical identity and optional robots.txt discovery record.</p>
+      </div>
+      <a class="button button-primary" href="../validator/">Open Validator <span aria-hidden="true">↘</span></a>
+    </section>
+  </main>
+
+  <footer class="implementations-footer">
+    <div class="shell">
+      <span>HUMIA Protocol · Experimental</span>
+      <a href="../">humiaprotocol.org</a>
+    </div>
+  </footer>
+</body>
+</html>

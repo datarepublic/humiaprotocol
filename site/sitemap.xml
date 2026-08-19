@@ -2,4 +2,6 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://humiaprotocol.org/</loc></url>
   <url><loc>https://humiaprotocol.org/spec/v0.3/</loc></url>
+  <url><loc>https://humiaprotocol.org/validator/</loc></url>
+  <url><loc>https://humiaprotocol.org/implementations/</loc></url>
 </urlset>

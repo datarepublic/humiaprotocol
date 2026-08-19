@@ -7,12 +7,14 @@ ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "site"
 
 index = (SITE / "index.html").read_text(encoding="utf-8")
+sitemap = (SITE / "sitemap.xml").read_text(encoding="utf-8")
 robots = (SITE / "robots.txt").read_text(encoding="utf-8")
 policy = json.loads((SITE / ".well-known" / "humia.json").read_text(encoding="utf-8"))
 js = (SITE / "js" / "humia.js").read_text(encoding="utf-8")
 validator_index = (SITE / "validator" / "index.html").read_text(encoding="utf-8")
 validator_js = (SITE / "validator" / "validator.js").read_text(encoding="utf-8")
 validator_php = (SITE / "validator" / "validate.php").read_text(encoding="utf-8")
+implementations_index = (SITE / "implementations" / "index.html").read_text(encoding="utf-8")
 
 assert policy["protocol"] == "HUMIA"
 assert policy["version"] == "0.3"
@@ -33,6 +35,12 @@ assert '"principle": "measurable_reciprocal_access"' not in index
 assert '"usage_reporting": "requested"' in index
 assert "form action=" not in index.lower()
 assert 'href="validator/"' in index
+assert 'href="implementations/"' in index
+assert "HangarRC" in implementations_index
+assert "DataRepublic" in implementations_index
+assert "Not yet claimed live" in implementations_index
+assert "https://humiaprotocol.org/validator/" in sitemap
+assert "https://humiaprotocol.org/implementations/" in sitemap
 assert 'data-validator-form' in validator_index
 assert "fetch('validate.php'" in validator_js
 assert "/.well-known/humia.json" in validator_php

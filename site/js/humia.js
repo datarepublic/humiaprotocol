@@ -149,8 +149,10 @@
   const renderGenerator = (origin) => {
     const policyUrl = `${origin}/.well-known/humia.json`;
     const robotsUrl = `${origin}/robots.txt`;
-    const robots = `# HUMIA Protocol discovery (experimental)\nHumia: ${policyUrl}`;
     const policy = buildPolicy(origin);
+    const trainAi = policy.usage.training === 'allow' ? 'y' : 'n';
+    const searchUse = policy.usage.search_retrieval === 'allow' ? 'y' : 'n';
+    const robots = `# AIPREF Content-Usage attachment (experimental)\nContent-Usage: train-ai=${trainAi}, search=${searchUse}\n\n# HUMIA Protocol discovery (experimental)\nHumia: ${policyUrl}`;
     const json = JSON.stringify(policy, null, 2);
 
     const humanMeaning = [

@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HUMIA Protocol — Interoperability Pilot</title>
+  <meta name="description" content="Run the experimental HUMIA v0.3 + AIPREF interoperability pilot on a real website.">
+  <link rel="canonical" href="https://humiaprotocol.org/pilot/">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../css/humia.css">
+  <style>
+    .pilot-page{padding:8.5rem 0 5rem}
+    .pilot-hero{max-width:820px}
+    .pilot-hero h1{font-size:clamp(2.8rem,7vw,6rem);line-height:.94;margin:.8rem 0 1.5rem}
+    .pilot-lede{font-size:1.25rem;line-height:1.65;max-width:760px}
+    .pilot-badges{display:flex;gap:.65rem;flex-wrap:wrap;margin:1.5rem 0 0}
+    .pilot-badge{border:1px solid currentColor;border-radius:999px;padding:.45rem .75rem;font-size:.78rem;text-transform:uppercase;letter-spacing:.08em}
+    .pilot-grid-public{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin-top:3rem}
+    .pilot-card-public{border:1px solid rgba(20,20,20,.18);padding:1.5rem;background:rgba(255,255,255,.3)}
+    .pilot-result{font-family:monospace;font-size:.92rem;line-height:1.8}
+    .pilot-steps{margin-top:5rem}
+    .pilot-step{display:grid;grid-template-columns:70px 1fr;gap:1.2rem;border-top:1px solid rgba(20,20,20,.18);padding:1.7rem 0}
+    .pilot-step-index{font-family:monospace}
+    .pilot-step pre{overflow:auto;padding:1rem;background:#171714;color:#f5f3e8}
+    .pilot-warning{margin-top:3rem;padding:1.25rem 1.4rem;border:1px solid rgba(20,20,20,.3)}
+    .pilot-actions{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1.5rem}
+    @media(max-width:760px){.pilot-grid-public{grid-template-columns:1fr}.pilot-step{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header is-scrolled">
+    <div class="shell nav-wrap">
+      <a class="brand" href="../" aria-label="HUMIA Protocol home">
+        <span class="brand-mark" aria-hidden="true"><span></span><i></i><span></span></span>
+        <span class="brand-word">HUMIA</span><span class="brand-suffix">Protocol</span>
+      </a>
+      <nav class="main-nav" aria-label="Pilot navigation">
+        <a href="../">Home</a>
+        <a href="../implementations/">Implementations</a>
+        <a href="../validator/">Validator</a>
+        <a href="../spec/v0.3/">Spec v0.3</a>
+      </nav>
+    </div>
+  </header>
+  <main id="main" class="pilot-page">
+    <section class="shell pilot-hero">
+      <p class="section-index">HUMIA / Interoperability Pilot</p>
+      <h1>Install it on a real website.</h1>
+      <p class="pilot-lede">This pilot tests a transition model: keep the public HUMIA manifest on v0.3, use AIPREF for AI content-use preferences such as training and search, and verify that both declarations remain semantically consistent.</p>
+      <div class="pilot-badges">
+        <span class="pilot-badge">Experimental</span>
+        <span class="pilot-badge">HUMIA v0.3 baseline</span>
+        <span class="pilot-badge">AIPREF attachment experimental</span>
+      </div>
+      <div class="pilot-actions">
+        <a class="button button-primary" href="../#generator">Generate pilot files <span aria-hidden="true">↘</span></a>
+        <a class="button button-quiet" href="../validator/">Validate HUMIA v0.3</a>
+      </div>
+    </section>
+    <section class="shell pilot-grid-public" aria-label="Current live pilot results">
+      <article class="pilot-card-public"><p class="section-index">Live origin 01</p><h2>humiaprotocol.org</h2><p class="pilot-result">Content-Usage: train-ai=n, search=y<br>HUMIA: v0.3<br>Semantic checker: PASS</p></article>
+      <article class="pilot-card-public"><p class="section-index">Live origin 02</p><h2>HangarRC</h2><p class="pilot-result">Content-Usage: train-ai=n, search=y<br>HUMIA: v0.3<br>Semantic checker: PASS</p></article>
+    </section>
+    <section class="shell pilot-steps">
+      <div class="pilot-step"><span class="pilot-step-index">01</span><div><h2>Choose training and search preferences.</h2><p>Use the generator on the HUMIA homepage. During this pilot, HUMIA v0.3 <code>training</code> maps to AIPREF <code>train-ai</code>, and HUMIA <code>search_retrieval</code> maps to AIPREF <code>search</code>.</p><pre><code>allow → y
+deny  → n</code></pre></div></div>
+      <div class="pilot-step"><span class="pilot-step-index">02</span><div><h2>Publish the HUMIA manifest.</h2><p>Place the generated JSON at the predictable public endpoint:</p><pre><code>https://YOUR-DOMAIN/.well-known/humia.json</code></pre><p>The public pilot baseline remains HUMIA v0.3. Do not publish the experimental v0.4 repository prototype as your stable manifest.</p></div></div>
+      <div class="pilot-step"><span class="pilot-step-index">03</span><div><h2>Merge the robots additions safely.</h2><p>Do not replace an existing <code>robots.txt</code>. Preserve all current crawler rules. Merge <code>Content-Usage</code> into the intended robots group and add the experimental HUMIA discovery line.</p><pre><code>User-agent: *
+Content-Usage: train-ai=n, search=y
+
+Humia: https://YOUR-DOMAIN/.well-known/humia.json</code></pre></div></div>
+      <div class="pilot-step"><span class="pilot-step-index">04</span><div><h2>Validate the public HUMIA baseline.</h2><p>Run the public validator first. It checks the current HUMIA v0.3 deployment. A validator PASS is not an IETF certification or standards endorsement.</p><p><a href="../validator/">Open the public validator →</a></p></div></div>
+      <div class="pilot-step"><span class="pilot-step-index">05</span><div><h2>Run the experimental semantic checker.</h2><p>From the HUMIA repository branch <code>experiment/v0.4-aipref</code>:</p><pre><code>python3 experiments/v0.4/check_live.py https://YOUR-DOMAIN</code></pre><p>A successful pilot ends with:</p><pre><code>RESULT: PASS — HUMIA and AIPREF are discoverable and semantically consistent for this experiment.</code></pre></div></div>
+    </section>
+    <section class="shell pilot-warning"><strong>What this pilot does not claim.</strong><p>The AIPREF attachment mechanism used here is experimental. A PASS is an implementation result only. It is not IETF approval, AIPREF certification, legal compliance, or evidence that AI providers currently honor HUMIA or these preferences.</p></section>
+  </main>
+  <footer><div class="shell"><span>HUMIA Protocol · Experimental interoperability pilot</span></div></footer>
+</body>
+</html>

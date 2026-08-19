@@ -41,6 +41,7 @@
         <a href="#pillars">Principles</a>
         <a href="#manifest">Manifest</a>
         <a href="implementations/">Implementations</a>
+        <a href="pilot/">Pilot</a>
         <a href="#spec">Spec v0.3</a>
         <a href="validator/">Validate</a>
         <a class="nav-cta" href="#generator">Generate</a>
@@ -113,8 +114,8 @@
           <h2>The Web needs a cooperation layer.</h2>
         </div>
         <div class="section-copy">
-          <p>The Web already has ways to communicate, discover pages and express crawl preferences. AI agents introduce a broader relationship: identity, intended use, attribution, access conditions and measurable reciprocity.</p>
-          <p>HUMIA does not replace <code>robots.txt</code>. It adds a machine-readable layer for richer cooperation.</p>
+          <p>The Web already has established mechanisms for communication and crawling. HUMIA now experiments with a narrower role: reuse REP for crawl behavior, reuse AIPREF for AI content-use preferences, and keep HUMIA focused on origin-level cooperation semantics such as attribution and reciprocity.</p>
+          <p>HUMIA does not replace <code>robots.txt</code>, REP or AIPREF. The current interoperability pilot tests how these mechanisms can coexist on a real website.</p>
         </div>
       </div>
 
@@ -153,9 +154,14 @@
           <span class="stack-note">Where content can be found</span>
         </div>
         <div class="stack-row">
-          <span class="stack-name">robots.txt</span>
-          <span class="stack-role">Crawl preferences</span>
-          <span class="stack-note">Where automated crawlers are invited or discouraged</span>
+          <span class="stack-name">robots.txt / REP</span>
+          <span class="stack-role">Crawl behavior</span>
+          <span class="stack-note">Path-level rules for automated crawlers</span>
+        </div>
+        <div class="stack-row">
+          <span class="stack-name">AIPREF</span>
+          <span class="stack-role">AI content use</span>
+          <span class="stack-note">Preferences such as training and search use</span>
         </div>
         <div class="stack-row stack-row-humia">
           <span class="stack-name">HUMIA</span>
@@ -333,7 +339,7 @@ Sitemap: https://example.org/sitemap.xml</code></pre>
             <div class="pilot-url"><span></span> hangarrc.com/.well-known/humia.json</div>
             <div class="pilot-data">
               <span><i>protocol</i><b>HUMIA</b></span>
-              <span><i>version</i><b>0.1</b></span>
+              <span><i>version</i><b>0.3</b></span>
               <span><i>status</i><b>draft</b></span>
               <span><i>type</i><b>ecommerce</b></span>
               <span><i>gateway</i><b>false</b></span>
@@ -342,10 +348,11 @@ Sitemap: https://example.org/sitemap.xml</code></pre>
           </div>
         </div>
         <div class="pilot-copy reveal">
-          <p class="section-index">06 / Early public pilot</p>
-          <h2>Start with the real Web.</h2>
-          <p><strong>HangarRC</strong>, an ecommerce website, is being used as an early public pilot for HUMIA discovery and policy declaration.</p>
-          <p>Its current draft policy distinguishes public catalog content from private areas, requests attribution and declares measurable reciprocal access as a principle.</p>
+          <p class="section-index">06 / Live interoperability pilot</p>
+          <h2>Test on the real Web.</h2>
+          <p><strong>HangarRC</strong> and <strong>humiaprotocol.org</strong> now publish HUMIA v0.3 together with an experimental AIPREF <code>Content-Usage</code> preference.</p>
+          <p>Both origins currently publish <code>train-ai=n, search=y</code>, and the experimental live checker confirms that those AIPREF preferences are semantically consistent with their HUMIA v0.3 policies.</p>
+          <p><a href="pilot/">Run the interoperability pilot →</a></p>
           <div class="truth-box">
             <strong>No adoption claim.</strong>
             <p>The presence of a HUMIA manifest does not imply that any AI company or crawler currently reads, supports or honors HUMIA.</p>
@@ -379,7 +386,7 @@ Sitemap: https://example.org/sitemap.xml</code></pre>
               <span class="install-guide-step">1</span>
               <div>
                 <strong>Open your website's <code>robots.txt</code></strong>
-                <p>This is the text file visible at <code>https://your-site.com/robots.txt</code>. If it already exists, keep everything in it and paste the HUMIA lines at the end. If it does not exist, create a plain text file named <code>robots.txt</code> in the public root of your website.</p>
+                <p>This is the text file visible at <code>https://your-site.com/robots.txt</code>. If it already exists, preserve every existing rule. Merge the generated <code>Content-Usage</code> preference into the intended robots group and add the experimental <code>Humia:</code> discovery line without deleting site-specific directives.</p>
                 <p class="install-guide-example"><span>Typical FTP location</span><code>/www/robots.txt</code></p>
               </div>
             </article>
@@ -494,7 +501,7 @@ Sitemap: https://example.org/sitemap.xml</code></pre>
             <div class="output-empty" data-output-empty>
               <span class="output-mark" aria-hidden="true"><span></span><i></i><span></span></span>
               <strong>Your install package appears here.</strong>
-              <p>Enter your domain, choose your policy and generate. HUMIA will create a robots.txt discovery snippet and a <code>humia.json</code> file.</p>
+              <p>Enter your domain, choose your policy and generate. HUMIA will create an experimental AIPREF + HUMIA robots.txt snippet and a <code>humia.json</code> file.</p>
             </div>
 
             <div class="output-results" data-output-results hidden>
@@ -506,7 +513,7 @@ Sitemap: https://example.org/sitemap.xml</code></pre>
                   </div>
                   <button type="button" class="output-action" data-copy-robots>Copy</button>
                 </div>
-                <p class="output-help"><strong>Where?</strong> Open the file served at <code>your-site.com/robots.txt</code> and paste these lines at the end. Keep all existing Allow / Disallow rules.</p>
+                <p class="output-help"><strong>Where?</strong> Review your existing <code>robots.txt</code>. Merge <code>Content-Usage</code> into the intended robots group (commonly <code>User-agent: *</code> for a site-wide pilot), preserve all existing rules, and add the <code>Humia:</code> discovery line.</p>
                 <pre><code data-robots-output></code></pre>
               </div>
 

@@ -25,6 +25,7 @@
       <nav class="main-nav implementations-nav" aria-label="Implementations navigation">
         <a href="../">Home</a>
         <a href="../validator/">Validator</a>
+        <a href="../pilot/">Pilot</a>
         <a href="../spec/v0.3/">Spec v0.3</a>
       </nav>
     </div>
@@ -46,11 +47,12 @@
         </div>
         <h2>HUMIA Protocol</h2>
         <p class="implementation-type">Reference deployment</p>
-        <p>The protocol website publishes the canonical v0.3 example policy and the public validator used to test implementations.</p>
+        <p>The protocol website publishes the canonical v0.3 example policy and also runs the experimental HUMIA + AIPREF interoperability pilot.</p>
         <dl>
           <div><dt>Origin</dt><dd><a href="https://humiaprotocol.org/">humiaprotocol.org</a></dd></div>
           <div><dt>Policy</dt><dd><a href="https://humiaprotocol.org/.well-known/humia.json">/.well-known/humia.json</a></dd></div>
-          <div><dt>Discovery</dt><dd><code>Humia:</code> record present in robots.txt</dd></div>
+          <div><dt>AIPREF pilot</dt><dd><code>train-ai=n</code> · <code>search=y</code></dd></div>
+          <div><dt>Interop check</dt><dd>PASS · HUMIA v0.3 and AIPREF semantics consistent</dd></div>
         </dl>
       </article>
 
@@ -61,11 +63,12 @@
         </div>
         <h2>HangarRC</h2>
         <p class="implementation-type">E-commerce pilot</p>
-        <p>HangarRC is a public e-commerce deployment. On 19 August 2026 its earlier HUMIA v0.1 policy was migrated to v0.3 and passed the public Validator V0 checks.</p>
+        <p>HangarRC is a public e-commerce deployment. On 19 August 2026 its earlier HUMIA v0.1 policy was migrated to v0.3, then extended with the same experimental HUMIA + AIPREF interoperability pilot.</p>
         <dl>
           <div><dt>Origin</dt><dd><a href="https://hangarrc.com/">hangarrc.com</a></dd></div>
           <div><dt>Policy</dt><dd><a href="https://hangarrc.com/.well-known/humia.json">/.well-known/humia.json</a></dd></div>
-          <div><dt>Profile</dt><dd>User assistance and search/retrieval allowed; bulk crawl and training denied.</dd></div>
+          <div><dt>AIPREF pilot</dt><dd><code>train-ai=n</code> · <code>search=y</code></dd></div>
+          <div><dt>Interop check</dt><dd>PASS · HUMIA v0.3 and AIPREF semantics consistent</dd></div>
         </dl>
       </article>
 
@@ -84,9 +87,9 @@
       <div>
         <p class="section-index">Validate your deployment</p>
         <h2>Already publishing HUMIA?</h2>
-        <p>Run the public validator against your HTTPS origin and check the v0.3 policy, canonical identity and optional robots.txt discovery record.</p>
+        <p>Start with the public v0.3 validator. If you also want to test AIPREF interoperability, follow the experimental pilot and run the semantic checker.</p>
       </div>
-      <a class="button button-primary" href="../validator/">Open Validator <span aria-hidden="true">↘</span></a>
+      <a class="button button-primary" href="../pilot/">Open Pilot <span aria-hidden="true">↘</span></a>
     </section>
   </main>
 

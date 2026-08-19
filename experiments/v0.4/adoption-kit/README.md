@@ -4,85 +4,96 @@ Status: Experimental pilot
 Baseline: public HUMIA v0.3 + experimental AIPREF attachment
 Date: 2026-08-19
 
-This kit is for a website owner who wants to run the same interoperability
-experiment already used on HangarRC and humiaprotocol.org.
+This kit is intended to test whether an independent website operator can
+publish HUMIA + AIPREF without assistance from the HUMIA project.
 
 It does NOT claim IETF, AIPREF, or HUMIA v0.4 certification.
 
-## What you publish
+## Important robots.txt safety rule
 
-Two public resources are required:
+DO NOT replace an existing robots.txt with a HUMIA template.
 
-1. /.well-known/humia.json
-2. /robots.txt
+Existing websites often have crawler rules, sitemap declarations, or
+application-specific exclusions that must be preserved.
 
-The HUMIA manifest remains v0.3 during this pilot.
+This kit therefore generates a robots ADDITIONS file. The operator merges the
+generated lines into the existing robots.txt after reviewing the current file.
 
-The AIPREF `Content-Usage` line is experimental. The AIPREF vocabulary draft
-is active, while the current attachment draft used for HTTP/robots discovery
-has expired and may change.
+For the AIPREF experiment, the Content-Usage rule belongs in the intended
+robots group, usually the existing `User-agent: *` group for a site-wide pilot.
 
-## Step 1 — Edit the HUMIA manifest
+## 1. Generate the pilot files
 
-Open:
+Run:
 
-    .well-known/humia.json
+    python3 configure.py \
+      --origin https://example.com \
+      --name "Example Site" \
+      --training deny \
+      --search allow \
+      --output generated
 
-Replace:
+Allowed values for `--training` and `--search` are:
 
-    YOUR SITE NAME
-    https://example.com/
+    allow
+    deny
 
-Keep the origin HTTPS.
+The generator creates:
 
-Choose the two usage preferences:
+    generated/.well-known/humia.json
+    generated/robots-additions.txt
 
-    "training": "allow" or "deny"
-    "search_retrieval": "allow" or "deny"
+## 2. Review the generated manifest
 
-## Step 2 — Edit robots.txt
+The public HUMIA manifest remains v0.3 during this pilot.
 
-Open:
+The generator maps:
 
-    robots.txt
+    training=allow -> train-ai=y
+    training=deny  -> train-ai=n
 
-Replace:
+    search=allow   -> search=y
+    search=deny    -> search=n
 
-    https://example.com/
+## 3. Merge robots additions safely
 
-Then make `Content-Usage` match the HUMIA v0.3 values.
+First inspect the site's current robots file:
 
-Mapping used by this pilot:
+    curl -fsS https://example.com/robots.txt
 
-    HUMIA training=allow          -> train-ai=y
-    HUMIA training=deny           -> train-ai=n
+Then open:
 
-    HUMIA search_retrieval=allow  -> search=y
-    HUMIA search_retrieval=deny   -> search=n
+    generated/robots-additions.txt
 
-Example:
+Merge the `Content-Usage` line into the intended robots group.
 
-    Content-Usage: train-ai=n, search=y
+Preserve all existing Allow, Disallow, Sitemap, and other site-specific rules.
 
-## Step 3 — Publish
+Add the experimental HUMIA discovery line without deleting existing content.
 
-Publish the files so these URLs return HTTP 200:
+## 4. Publish
+
+Publish:
+
+    generated/.well-known/humia.json
+
+as:
 
     https://YOUR-DOMAIN/.well-known/humia.json
+
+Publish the reviewed robots changes as the site's normal:
+
     https://YOUR-DOMAIN/robots.txt
 
-Do not expose private APIs or credentials. HUMIA is not authorization.
+Do not expose credentials or protected APIs. HUMIA is not authorization.
 
-## Step 4 — Verify manually
+## 5. Verify the live files
 
-Check:
+Run:
 
-    curl -fsS https://YOUR-DOMAIN/robots.txt
-    curl -fsS https://YOUR-DOMAIN/.well-known/humia.json
+    ./verify.sh https://YOUR-DOMAIN
 
-## Step 5 — Run the HUMIA experimental checker
-
-From a clone of the HUMIA repository on branch `experiment/v0.4-aipref`:
+Then, from a HUMIA repository checkout on branch `experiment/v0.4-aipref`:
 
     python3 experiments/v0.4/check_live.py https://YOUR-DOMAIN
 
@@ -92,30 +103,25 @@ Expected final result:
 
 ## What PASS means
 
-PASS means the experimental checker found:
-
-- a reachable robots.txt;
-- a reachable HUMIA manifest;
-- valid HUMIA protocol identity;
-- matching canonical origin;
-- AIPREF `Content-Usage`;
-- supported `train-ai` and `search` values;
-- HUMIA discovery;
-- consistency between the v0.3 HUMIA usage fields and AIPREF preferences.
+PASS means the experimental checker found the public resources and confirmed
+the currently supported HUMIA v0.3 <-> AIPREF semantic mapping.
 
 PASS does NOT mean legal compliance, IETF approval, AIPREF certification,
 or stable HUMIA v0.4 conformance.
 
-## Pilot feedback
+## Pilot feedback to record
 
-If a third-party site can install this kit without help from the HUMIA project,
-that is an important implementation result. Record:
+For every independent installation, record:
 
 - origin;
 - date;
-- published preferences;
+- training preference;
+- search preference;
 - checker output;
+- existing robots structure;
 - installation problems;
-- ambiguities or missing semantics.
+- ambiguities;
+- anything the operator needed HUMIA project help to understand.
 
-Those findings should drive the next HUMIA v0.4 iteration.
+A successful independent installation is stronger evidence than another
+installation performed by the HUMIA project itself.

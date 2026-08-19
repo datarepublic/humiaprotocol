@@ -15,5 +15,5 @@ echo "----- HUMIA manifest -----"
 curl -fsS "$origin/.well-known/humia.json"
 echo
 echo
-echo "For semantic validation, run from the HUMIA repository:"
+echo "Semantic checker:"
 echo "python3 experiments/v0.4/check_live.py $origin"

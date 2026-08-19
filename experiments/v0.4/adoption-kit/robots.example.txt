@@ -1,4 +1,6 @@
+# EXAMPLE ONLY — do not overwrite an existing robots.txt with this file.
 User-agent: *
+Allow: /
 Content-Usage: train-ai=n, search=y
 
 # HUMIA Protocol discovery (experimental)

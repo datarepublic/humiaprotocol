@@ -1,0 +1,672 @@
+
+
+
+
+Network Working Group                                        B. Treneule
+Internet-Draft                                            HUMIA Protocol
+Intended status: Experimental                             19 August 2026
+Expires: 20 February 2027
+
+
+        HUMIA: A Website-First Protocol for Human-AI Cooperation
+                    draft-treneule-humia-protocol-00
+
+Abstract
+
+   HUMIA defines a website-first mechanism for publishing a machine-
+   readable cooperation policy for AI agents.  A website publishes a
+   JSON policy at /.well-known/humia.json.  The policy identifies the
+   origin and expresses site-level conditions for public-content access,
+   selected AI usage purposes, attribution, and optional usage
+   reporting.
+
+   HUMIA does not replace the Robots Exclusion Protocol, authentication,
+   authorization, licensing, or access-control mechanisms.  It is an
+   additional cooperation layer.  This document also defines an
+   optional, experimental Humia: discovery record in robots.txt that
+   points HUMIA-aware agents to the canonical policy URI.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 20 February 2027.
+
+Copyright Notice
+
+   Copyright (c) 2026 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+
+
+
+
+
+Treneule                Expires 20 February 2027                [Page 1]
+
+Internet-Draft               HUMIA Protocol                  August 2026
+
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.  Code Components
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
+
+Table of Contents
+
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
+   2.  Conventions and Terminology . . . . . . . . . . . . . . . . .   3
+   3.  Protocol Overview . . . . . . . . . . . . . . . . . . . . . .   4
+   4.  Well-Known URI  . . . . . . . . . . . . . . . . . . . . . . .   4
+     4.1.  URI . . . . . . . . . . . . . . . . . . . . . . . . . . .   4
+     4.2.  Retrieval . . . . . . . . . . . . . . . . . . . . . . . .   4
+     4.3.  Absence and Errors  . . . . . . . . . . . . . . . . . . .   5
+   5.  JSON Representation . . . . . . . . . . . . . . . . . . . . .   5
+   6.  Required Members  . . . . . . . . . . . . . . . . . . . . . .   6
+     6.1.  protocol  . . . . . . . . . . . . . . . . . . . . . . . .   6
+     6.2.  version . . . . . . . . . . . . . . . . . . . . . . . . .   6
+     6.3.  identity  . . . . . . . . . . . . . . . . . . . . . . . .   7
+   7.  Access Conditions . . . . . . . . . . . . . . . . . . . . . .   7
+   8.  Usage Conditions  . . . . . . . . . . . . . . . . . . . . . .   7
+   9.  Attribution . . . . . . . . . . . . . . . . . . . . . . . . .   8
+   10. Reciprocity . . . . . . . . . . . . . . . . . . . . . . . . .   8
+   11. Relationship to robots.txt  . . . . . . . . . . . . . . . . .   8
+     11.1.  Experimental Humia: Record . . . . . . . . . . . . . . .   8
+   12. Human-Readable Presentation . . . . . . . . . . . . . . . . .   9
+   13. Security Considerations . . . . . . . . . . . . . . . . . . .   9
+   14. Privacy Considerations  . . . . . . . . . . . . . . . . . . .   9
+   15. Versioning and Extensibility  . . . . . . . . . . . . . . . .  10
+   16. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  10
+   17. Implementation Status . . . . . . . . . . . . . . . . . . . .  10
+   18. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  11
+   19. Normative References  . . . . . . . . . . . . . . . . . . . .  11
+   Appendix A.  Change Log . . . . . . . . . . . . . . . . . . . . .  12
+     A.1.  draft-treneule-humia-protocol-00  . . . . . . . . . . . .  12
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  12
+
+1.  Introduction
+
+   The Web has a language for crawling.  It needs a language for
+   cooperation.
+
+
+
+
+
+
+Treneule                Expires 20 February 2027                [Page 2]
+
+Internet-Draft               HUMIA Protocol                  August 2026
+
+
+   The Robots Exclusion Protocol (REP) [RFC9309] provides a widely
+   deployed mechanism for crawlers to understand path-level crawling
+   preferences.  Modern AI systems, however, can interact with websites
+   for materially different purposes, including assisting a user,
+   retrieving information for a response, indexing information, bulk
+   collection, or model training.
+
+   HUMIA provides a small, origin-level JSON document through which a
+   website can state cooperation conditions for those interactions.  The
+   design is intentionally website-first: publication requires only a
+   static JSON file, and no HUMIA account, registration, API, or server-
+   side component is required.
+
+   This document defines HUMIA Protocol version 0.3 as an experimental
+   protocol.  It intentionally defines a small interoperable core.  More
+   advanced mechanisms such as authenticated agent identity, delegated
+   authority, capability negotiation, enforcement, settlement, and
+   signed receipts are outside the scope of this version.
+
+2.  Conventions and Terminology
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in BCP
+   14 RFC2119 RFC8174 when, and only when, they appear in all capitals,
+   as shown here.
+
+   BCP 14 consists of RFC2119 and RFC8174; see [BCP14].
+
+   Publisher  The operator responsible for an HTTPS origin and its HUMIA
+      policy.
+
+   Agent  An automated system that retrieves or uses Web resources,
+      including AI-enabled systems acting independently or on behalf of
+      a user.
+
+   HUMIA policy  The JSON representation retrieved from /.well-known/
+      humia.json for an origin.
+
+   Canonical origin  The HTTPS origin identified by the
+      identity.canonical member of the policy.
+
+   Usage purpose  A declared category describing why an agent intends to
+      use public content.
+
+
+
+
+
+
+
+Treneule                Expires 20 February 2027                [Page 3]
+
+Internet-Draft               HUMIA Protocol                  August 2026
+
+
+3.  Protocol Overview
+
+   A HUMIA-aware agent discovers the policy for an HTTPS origin by
+   requesting:
+
+   https://example.com/.well-known/humia.json
+
+   If a valid policy is returned, the agent can use the policy to
+   understand the publisher's declared cooperation policy.
+
+   A publisher MAY additionally include the following experimental
+   discovery record in robots.txt:
+
+   <CODE BEGINS>
+   # HUMIA Protocol discovery (experimental)
+   Humia: https://example.com/.well-known/humia.json
+   <CODE ENDS>
+
+   The well-known URI is canonical.  The Humia: record is only a
+   discovery hint and is not required for HUMIA operation.
+
+4.  Well-Known URI
+
+4.1.  URI
+
+   For an HTTPS origin with authority example.com, the HUMIA policy URI
+   is:
+
+   https://example.com/.well-known/humia.json
+
+   This specification defines HUMIA only for the https URI scheme.
+
+   The policy applies to the origin from which it is retrieved.  A
+   policy retrieved from one origin MUST NOT be interpreted as
+   controlling another origin.
+
+4.2.  Retrieval
+
+   An agent retrieves the policy using HTTP GET [RFC9110].
+
+   A successful response:
+
+   *  MUST use status code 200;
+
+   *  MUST have a representation that is valid JSON [RFC8259]; and
+
+   *  SHOULD use media type application/json.
+
+
+
+
+Treneule                Expires 20 February 2027                [Page 4]
+
+Internet-Draft               HUMIA Protocol                  August 2026
+
+
+   Agents SHOULD respect HTTP caching directives.  Publishers SHOULD
+   provide cache directives appropriate to the expected frequency of
+   policy changes.
+
+   Agents MUST NOT follow a redirect from the HUMIA well-known URI to a
+   different origin.  Same-origin redirects MAY be followed in
+   accordance with normal HTTP behavior.
+
+4.3.  Absence and Errors
+
+   A 404 response means that no HUMIA policy is published at the
+   canonical location.
+
+   For any of the following conditions, an agent MUST treat HUMIA as
+   unavailable for that origin:
+
+   *  a non-successful HTTP response other than a supported same-origin
+      redirect;
+
+   *  invalid JSON;
+
+   *  a missing or unsupported protocol or version member; or
+
+   *  a canonical identity that does not match the origin from which the
+      policy was retrieved.
+
+   HUMIA unavailability MUST NOT be interpreted as permission,
+   prohibition, authorization, or consent.  Other applicable mechanisms,
+   contracts, access controls, policies, and law continue to apply.
+
+5.  JSON Representation
+
+   The top-level representation is a JSON object.  The following example
+   is illustrative:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Treneule                Expires 20 February 2027                [Page 5]
+
+Internet-Draft               HUMIA Protocol                  August 2026
+
+
+   {
+     "protocol": "HUMIA",
+     "version": "0.3",
+     "status": "draft",
+     "identity": {
+       "name": "Example Publisher",
+       "canonical": "https://example.com/"
+     },
+     "access": {
+       "public_content": "allow",
+       "private_api": "deny"
+     },
+     "usage": {
+       "user_assistance": "allow",
+       "search_retrieval": "allow",
+       "bulk_crawl": "deny",
+       "training": "deny"
+     },
+     "attribution": {
+       "required": true,
+       "canonical_url": true
+     },
+     "reciprocity": {
+       "usage_reporting": "requested"
+     }
+   }
+
+   Unknown top-level members and unknown members inside defined objects
+   MUST be ignored by agents unless a future HUMIA version defines
+   otherwise.  This permits compatible extension of the representation.
+
+6.  Required Members
+
+6.1.  protocol
+
+   protocol is REQUIRED and MUST be the case-sensitive string HUMIA.
+
+6.2.  version
+
+   version is REQUIRED.  This document defines version string 0.3.
+
+   An agent that does not support the advertised version MUST treat the
+   HUMIA policy as unavailable unless a future specification defines
+   compatible version negotiation.
+
+
+
+
+
+
+
+Treneule                Expires 20 February 2027                [Page 6]
+
+Internet-Draft               HUMIA Protocol                  August 2026
+
+
+6.3.  identity
+
+   identity is REQUIRED and MUST be a JSON object.
+
+   identity.canonical is REQUIRED and MUST be an absolute HTTPS URI
+   representing the root of the origin to which the policy applies.  The
+   URI origin MUST match the origin from which the policy was retrieved.
+
+   identity.name is OPTIONAL human-readable text identifying the
+   publisher or website.
+
+7.  Access Conditions
+
+   access is OPTIONAL.  When present, it MUST be a JSON object.
+
+   public_content  Declares the publisher's HUMIA condition for publicly
+      reachable content.  Values are allow or deny.
+
+   private_api  Declares the publisher's HUMIA condition regarding use
+      of private or non-public APIs.  Values are allow or deny.
+
+   These values are declarative cooperation conditions.  They do not
+   bypass authentication, authorization, paywalls, network controls, or
+   other technical restrictions.
+
+8.  Usage Conditions
+
+   usage is OPTIONAL.  When present, it MUST be a JSON object.
+
+   This version defines the following usage purposes.  Each value is
+   allow or deny.
+
+   user_assistance  Retrieval or reading of public content for the
+      purpose of answering or assisting a specific user request.
+
+   search_retrieval  Retrieval, indexing, or referencing of public
+      content for search, discovery, retrieval, grounding, or source-
+      backed responses.
+
+   bulk_crawl  High-volume or systematic collection of public content
+      beyond targeted retrieval for a specific user request.
+
+   training  Use of retrieved content as training material for a
+      machine-learning model, including pre-training or subsequent model
+      training.
+
+
+
+
+
+
+Treneule                Expires 20 February 2027                [Page 7]
+
+Internet-Draft               HUMIA Protocol                  August 2026
+
+
+   A publisher MAY omit a usage purpose.  Omission means HUMIA makes no
+   statement for that purpose.  It MUST NOT be interpreted as allow or
+   deny.
+
+9.  Attribution
+
+   attribution is OPTIONAL.  When present, it MUST be a JSON object.
+
+   required  A boolean.  When true, the publisher requests attribution
+      when content is used in a context where attribution can reasonably
+      be provided.
+
+   canonical_url  A boolean.  When true, attribution SHOULD preserve or
+      link to the canonical source URL where technically possible.
+
+   This document does not define an attribution rendering format.
+
+10.  Reciprocity
+
+   reciprocity is OPTIONAL.  When present, it MUST be a JSON object.
+
+   usage_reporting  The string requested indicates that the publisher
+      requests usage reporting when the agent supports such reporting.
+
+   Version 0.3 does not define a reporting transport, reporting
+   endpoint, mandatory reporting behavior, compensation mechanism, or
+   settlement protocol. requested is therefore an informational
+   cooperation request, not an authorization requirement.
+
+11.  Relationship to robots.txt
+
+   HUMIA does not replace REP [RFC9309].
+
+   A crawler that is subject to REP MUST continue to evaluate and honor
+   robots.txt independently of HUMIA.  HUMIA does not grant permission
+   to crawl a path that REP disallows.
+
+   Whether REP applies to an agent acting interactively on behalf of a
+   user is outside the scope of this document.
+
+11.1.  Experimental Humia: Record
+
+   A publisher MAY add a line of the following form to robots.txt:
+
+   Humia: https://example.com/.well-known/humia.json
+
+   For HUMIA-aware implementations, the record name Humia is matched
+   case-insensitively.  The value MUST be an absolute HTTPS URI.
+
+
+
+Treneule                Expires 20 February 2027                [Page 8]
+
+Internet-Draft               HUMIA Protocol                  August 2026
+
+
+   The record is an experimental discovery hint only.  A HUMIA-aware
+   agent MUST treat the canonical /.well-known/humia.json location as
+   authoritative.  A Humia: value pointing to another origin MUST NOT
+   cause that other origin to control the current origin's HUMIA policy.
+
+   Implementations that do not understand the Humia: record can ignore
+   it.  Its presence does not alter User-agent, Allow, or Disallow
+   processing defined by REP.
+
+12.  Human-Readable Presentation
+
+   A publisher tool MAY present a plain-language explanation of the
+   policy in addition to the machine-readable JSON.  Such explanations
+   are non-normative.  In case of disagreement, the JSON representation
+   is authoritative for HUMIA processing.
+
+13.  Security Considerations
+
+   HUMIA is a public policy mechanism and MUST NOT contain passwords,
+   bearer tokens, API keys, private credentials, personal authentication
+   material, or other secrets.
+
+   A HUMIA policy is not an access-control mechanism.  Agents MUST NOT
+   use an allow value to bypass authentication, authorization, network
+   restrictions, payment requirements, or other controls.
+
+   Publishers should serve HUMIA over HTTPS to protect policy integrity
+   in transit.  This specification defines the protocol only for HTTPS
+   origins.
+
+   Agents fetching HUMIA policies should apply normal protections
+   against server-side request forgery, malicious redirects, oversized
+   responses, resource exhaustion, and malicious JSON inputs.  Cross-
+   origin redirects are prohibited by this specification to reduce
+   origin-confusion risks.
+
+   A malicious party that gains control of a publisher's origin can
+   alter the HUMIA policy.  HUMIA does not attempt to provide security
+   beyond the security properties of HTTPS and control of the origin in
+   version 0.3.
+
+14.  Privacy Considerations
+
+   Fetching a HUMIA policy can reveal to the publisher that an automated
+   client is interested in the origin, just as fetching other public
+   resources can.
+
+
+
+
+
+Treneule                Expires 20 February 2027                [Page 9]
+
+Internet-Draft               HUMIA Protocol                  August 2026
+
+
+   A HUMIA request does not require an agent to disclose an end user's
+   identity.  Implementations SHOULD NOT add user-identifying
+   information to HUMIA discovery requests unless another protocol or
+   explicit user authorization requires it.
+
+   Publishers SHOULD avoid placing personal data in the HUMIA policy.
+   The policy is intended to be public and broadly cacheable.
+
+15.  Versioning and Extensibility
+
+   The version member identifies the HUMIA protocol version used by the
+   representation.
+
+   Version 0.3 intentionally defines a small core.  Future versions may
+   define additional objects or members, including agent identity,
+   delegated authority, capabilities, interaction mechanisms,
+   verification, enforcement, and richer reciprocity.
+
+   Unknown members MUST be ignored as specified in Section 5.  New
+   semantics that would change the meaning of existing members require a
+   new HUMIA version.
+
+16.  IANA Considerations
+
+   This document requests registration in the "Well-Known URIs" registry
+   established by [RFC8615].
+
+   URI suffix  humia.json
+
+   Change controller  HUMIA Protocol
+
+   Specification document  This document.
+
+   Status  provisional
+
+   Related information  https://humiaprotocol.org/
+
+   The registered resource is a JSON representation served over HTTPS
+   with media type application/json.
+
+17.  Implementation Status
+
+   This section is non-normative and may be removed before publication
+   as an RFC.
+
+
+
+
+
+
+
+Treneule                Expires 20 February 2027               [Page 10]
+
+Internet-Draft               HUMIA Protocol                  August 2026
+
+
+   As of August 2026, a public experimental implementation is available
+   at https://humiaprotocol.org/.well-known/humia.json, together with a
+   browser-based policy generator that produces a robots.txt discovery
+   snippet and a HUMIA JSON policy without requiring an account or
+   backend service.
+
+   Additional pilot deployments are being used to evaluate deployment
+   ergonomics and policy semantics.  No claim is made that major AI
+   providers currently implement or honor HUMIA.
+
+18.  Acknowledgements
+
+   The author thanks the Web and Internet standards communities whose
+   work on HTTP, JSON, well-known URIs, and the Robots Exclusion
+   Protocol makes this experiment possible.
+
+19.  Normative References
+
+   [BCP14]    Best Current Practice 14,
+              <https://www.rfc-editor.org/info/bcp14>.
+              At the time of writing, this BCP comprises the following:
+
+              Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/info/rfc2119>.
+
+              Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/info/rfc8174>.
+
+   [RFC8259]  Bray, T., "The JavaScript Object Notation (JSON) Data
+              Interchange Format", RFC 8259, December 2017,
+              <https://www.rfc-editor.org/info/rfc8259>.
+
+   [RFC8615]  Nottingham, M., "Well-Known Uniform Resource Identifiers
+              (URIs)", RFC 8615, May 2019,
+              <https://www.rfc-editor.org/info/rfc8615>.
+
+   [RFC9110]  Fielding, R., Nottingham, M., and J. Reschke, "HTTP
+              Semantics", RFC 9110, June 2022,
+              <https://www.rfc-editor.org/info/rfc9110>.
+
+   [RFC9309]  Koster, M., Illyes, G., and H. Zeller, "Robots Exclusion
+              Protocol", RFC 9309, September 2022,
+              <https://www.rfc-editor.org/info/rfc9309>.
+
+
+
+
+
+Treneule                Expires 20 February 2027               [Page 11]
+
+Internet-Draft               HUMIA Protocol                  August 2026
+
+
+Appendix A.  Change Log
+
+A.1.  draft-treneule-humia-protocol-00
+
+   Initial Internet-Draft version defining HUMIA Protocol v0.3, the
+   /.well-known/humia.json resource, the minimal JSON policy model, and
+   the optional experimental Humia: discovery record.
+
+Author's Address
+
+   Benjamin Treneule
+   HUMIA Protocol
+   Email: contact@humiaprotocol.org
+   URI:   https://humiaprotocol.org/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Treneule                Expires 20 February 2027               [Page 12]

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rfc>
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude"
+     category="exp"
+     docName="draft-treneule-humia-protocol-00"
+     ipr="trust200902"
+     submissionType="IETF"
+     version="3">
+  <front>
+    <title abbrev="HUMIA Protocol">HUMIA: A Website-First Protocol for Human-AI Cooperation</title>
+    <seriesInfo name="Internet-Draft" value="draft-treneule-humia-protocol-00"/>
+    <author fullname="Benjamin Treneule" initials="B." surname="Treneule">
+      <organization>HUMIA Protocol</organization>
+      <address>
+        <email>contact@humiaprotocol.org</email>
+        <uri>https://humiaprotocol.org/</uri>
+      </address>
+    </author>
+    <date year="2026" month="August" day="19"/>
+    <area>Applications and Real-Time</area>
+    <keyword>AI agents</keyword>
+    <keyword>Web</keyword>
+    <keyword>well-known URI</keyword>
+    <keyword>cooperation</keyword>
+    <abstract>
+      <t>HUMIA defines a website-first mechanism for publishing a machine-readable cooperation policy for AI agents. A website publishes a JSON policy at <tt>/.well-known/humia.json</tt>. The policy identifies the origin and expresses site-level conditions for public-content access, selected AI usage purposes, attribution, and optional usage reporting.</t>
+      <t>HUMIA does not replace the Robots Exclusion Protocol, authentication, authorization, licensing, or access-control mechanisms. It is an additional cooperation layer. This document also defines an optional, experimental <tt>Humia:</tt> discovery record in <tt>robots.txt</tt> that points HUMIA-aware agents to the canonical policy URI.</t>
+    </abstract>
+  </front>
+
+  <middle>
+    <section anchor="introduction">
+      <name>Introduction</name>
+      <t>The Web has a language for crawling. It needs a language for cooperation.</t>
+      <t>The Robots Exclusion Protocol (REP) <xref target="RFC9309"/> provides a widely deployed mechanism for crawlers to understand path-level crawling preferences. Modern AI systems, however, can interact with websites for materially different purposes, including assisting a user, retrieving information for a response, indexing information, bulk collection, or model training.</t>
+      <t>HUMIA provides a small, origin-level JSON document through which a website can state cooperation conditions for those interactions. The design is intentionally website-first: publication requires only a static JSON file, and no HUMIA account, registration, API, or server-side component is required.</t>
+      <t>This document defines HUMIA Protocol version 0.3 as an experimental protocol. It intentionally defines a small interoperable core. More advanced mechanisms such as authenticated agent identity, delegated authority, capability negotiation, enforcement, settlement, and signed receipts are outside the scope of this version.</t>
+    </section>
+
+    <section anchor="conventions">
+      <name>Conventions and Terminology</name>
+      <t>The key words "<bcp14>MUST</bcp14>", "<bcp14>MUST NOT</bcp14>", "<bcp14>REQUIRED</bcp14>", "<bcp14>SHALL</bcp14>", "<bcp14>SHALL NOT</bcp14>", "<bcp14>SHOULD</bcp14>", "<bcp14>SHOULD NOT</bcp14>", "<bcp14>RECOMMENDED</bcp14>", "<bcp14>NOT RECOMMENDED</bcp14>", "<bcp14>MAY</bcp14>", and "<bcp14>OPTIONAL</bcp14>" in this document are to be interpreted as described in BCP 14 <xref target="RFC2119"/> <xref target="RFC8174"/> when, and only when, they appear in all capitals, as shown here.</t>
+      <t>BCP 14 consists of <xref target="RFC2119"/> and <xref target="RFC8174"/>; see <xref target="BCP14"/>.</t>
+      <dl>
+        <dt>Publisher</dt><dd>The operator responsible for an HTTPS origin and its HUMIA policy.</dd>
+        <dt>Agent</dt><dd>An automated system that retrieves or uses Web resources, including AI-enabled systems acting independently or on behalf of a user.</dd>
+        <dt>HUMIA policy</dt><dd>The JSON representation retrieved from <tt>/.well-known/humia.json</tt> for an origin.</dd>
+        <dt>Canonical origin</dt><dd>The HTTPS origin identified by the <tt>identity.canonical</tt> member of the policy.</dd>
+        <dt>Usage purpose</dt><dd>A declared category describing why an agent intends to use public content.</dd>
+      </dl>
+    </section>
+
+    <section anchor="overview">
+      <name>Protocol Overview</name>
+      <t>A HUMIA-aware agent discovers the policy for an HTTPS origin by requesting:</t>
+      <sourcecode type="text">https://example.com/.well-known/humia.json</sourcecode>
+      <t>If a valid policy is returned, the agent can use the policy to understand the publisher's declared cooperation policy.</t>
+      <t>A publisher <bcp14>MAY</bcp14> additionally include the following experimental discovery record in <tt>robots.txt</tt>:</t>
+      <sourcecode type="text" markers="true"><![CDATA[# HUMIA Protocol discovery (experimental)
+Humia: https://example.com/.well-known/humia.json]]></sourcecode>
+      <t>The well-known URI is canonical. The <tt>Humia:</tt> record is only a discovery hint and is not required for HUMIA operation.</t>
+    </section>
+
+    <section anchor="well-known">
+      <name>Well-Known URI</name>
+      <section anchor="uri">
+        <name>URI</name>
+        <t>For an HTTPS origin with authority <tt>example.com</tt>, the HUMIA policy URI is:</t>
+        <sourcecode type="text">https://example.com/.well-known/humia.json</sourcecode>
+        <t>This specification defines HUMIA only for the <tt>https</tt> URI scheme.</t>
+        <t>The policy applies to the origin from which it is retrieved. A policy retrieved from one origin <bcp14>MUST NOT</bcp14> be interpreted as controlling another origin.</t>
+      </section>
+      <section anchor="retrieval">
+        <name>Retrieval</name>
+        <t>An agent retrieves the policy using HTTP <tt>GET</tt> <xref target="RFC9110"/>.</t>
+        <t>A successful response:</t>
+        <ul>
+          <li><t><bcp14>MUST</bcp14> use status code <tt>200</tt>;</t></li>
+          <li><t><bcp14>MUST</bcp14> have a representation that is valid JSON <xref target="RFC8259"/>; and</t></li>
+          <li><t><bcp14>SHOULD</bcp14> use media type <tt>application/json</tt>.</t></li>
+        </ul>
+        <t>Agents <bcp14>SHOULD</bcp14> respect HTTP caching directives. Publishers <bcp14>SHOULD</bcp14> provide cache directives appropriate to the expected frequency of policy changes.</t>
+        <t>Agents <bcp14>MUST NOT</bcp14> follow a redirect from the HUMIA well-known URI to a different origin. Same-origin redirects <bcp14>MAY</bcp14> be followed in accordance with normal HTTP behavior.</t>
+      </section>
+      <section anchor="errors">
+        <name>Absence and Errors</name>
+        <t>A <tt>404</tt> response means that no HUMIA policy is published at the canonical location.</t>
+        <t>For any of the following conditions, an agent <bcp14>MUST</bcp14> treat HUMIA as unavailable for that origin:</t>
+        <ul>
+          <li><t>a non-successful HTTP response other than a supported same-origin redirect;</t></li>
+          <li><t>invalid JSON;</t></li>
+          <li><t>a missing or unsupported <tt>protocol</tt> or <tt>version</tt> member; or</t></li>
+          <li><t>a canonical identity that does not match the origin from which the policy was retrieved.</t></li>
+        </ul>
+        <t>HUMIA unavailability <bcp14>MUST NOT</bcp14> be interpreted as permission, prohibition, authorization, or consent. Other applicable mechanisms, contracts, access controls, policies, and law continue to apply.</t>
+      </section>
+    </section>
+
+    <section anchor="json-representation">
+      <name>JSON Representation</name>
+      <t>The top-level representation is a JSON object. The following example is illustrative:</t>
+      <sourcecode type="json"><![CDATA[{
+  "protocol": "HUMIA",
+  "version": "0.3",
+  "status": "draft",
+  "identity": {
+    "name": "Example Publisher",
+    "canonical": "https://example.com/"
+  },
+  "access": {
+    "public_content": "allow",
+    "private_api": "deny"
+  },
+  "usage": {
+    "user_assistance": "allow",
+    "search_retrieval": "allow",
+    "bulk_crawl": "deny",
+    "training": "deny"
+  },
+  "attribution": {
+    "required": true,
+    "canonical_url": true
+  },
+  "reciprocity": {
+    "usage_reporting": "requested"
+  }
+}]]></sourcecode>
+      <t>Unknown top-level members and unknown members inside defined objects <bcp14>MUST</bcp14> be ignored by agents unless a future HUMIA version defines otherwise. This permits compatible extension of the representation.</t>
+    </section>
+
+    <section anchor="required-members">
+      <name>Required Members</name>
+      <section anchor="protocol-member"><name><tt>protocol</tt></name><t><tt>protocol</tt> is <bcp14>REQUIRED</bcp14> and <bcp14>MUST</bcp14> be the case-sensitive string <tt>HUMIA</tt>.</t></section>
+      <section anchor="version-member"><name><tt>version</tt></name><t><tt>version</tt> is <bcp14>REQUIRED</bcp14>. This document defines version string <tt>0.3</tt>.</t><t>An agent that does not support the advertised version <bcp14>MUST</bcp14> treat the HUMIA policy as unavailable unless a future specification defines compatible version negotiation.</t></section>
+      <section anchor="identity-member"><name><tt>identity</tt></name><t><tt>identity</tt> is <bcp14>REQUIRED</bcp14> and <bcp14>MUST</bcp14> be a JSON object.</t><t><tt>identity.canonical</tt> is <bcp14>REQUIRED</bcp14> and <bcp14>MUST</bcp14> be an absolute HTTPS URI representing the root of the origin to which the policy applies. The URI origin <bcp14>MUST</bcp14> match the origin from which the policy was retrieved.</t><t><tt>identity.name</tt> is <bcp14>OPTIONAL</bcp14> human-readable text identifying the publisher or website.</t></section>
+    </section>
+
+    <section anchor="access"><name>Access Conditions</name><t><tt>access</tt> is <bcp14>OPTIONAL</bcp14>. When present, it <bcp14>MUST</bcp14> be a JSON object.</t><dl><dt><tt>public_content</tt></dt><dd>Declares the publisher's HUMIA condition for publicly reachable content. Values are <tt>allow</tt> or <tt>deny</tt>.</dd><dt><tt>private_api</tt></dt><dd>Declares the publisher's HUMIA condition regarding use of private or non-public APIs. Values are <tt>allow</tt> or <tt>deny</tt>.</dd></dl><t>These values are declarative cooperation conditions. They do not bypass authentication, authorization, paywalls, network controls, or other technical restrictions.</t></section>
+
+    <section anchor="usage"><name>Usage Conditions</name><t><tt>usage</tt> is <bcp14>OPTIONAL</bcp14>. When present, it <bcp14>MUST</bcp14> be a JSON object.</t><t>This version defines the following usage purposes. Each value is <tt>allow</tt> or <tt>deny</tt>.</t><dl><dt><tt>user_assistance</tt></dt><dd>Retrieval or reading of public content for the purpose of answering or assisting a specific user request.</dd><dt><tt>search_retrieval</tt></dt><dd>Retrieval, indexing, or referencing of public content for search, discovery, retrieval, grounding, or source-backed responses.</dd><dt><tt>bulk_crawl</tt></dt><dd>High-volume or systematic collection of public content beyond targeted retrieval for a specific user request.</dd><dt><tt>training</tt></dt><dd>Use of retrieved content as training material for a machine-learning model, including pre-training or subsequent model training.</dd></dl><t>A publisher <bcp14>MAY</bcp14> omit a usage purpose. Omission means HUMIA makes no statement for that purpose. It <bcp14>MUST NOT</bcp14> be interpreted as <tt>allow</tt> or <tt>deny</tt>.</t></section>
+
+    <section anchor="attribution"><name>Attribution</name><t><tt>attribution</tt> is <bcp14>OPTIONAL</bcp14>. When present, it <bcp14>MUST</bcp14> be a JSON object.</t><dl><dt><tt>required</tt></dt><dd>A boolean. When <tt>true</tt>, the publisher requests attribution when content is used in a context where attribution can reasonably be provided.</dd><dt><tt>canonical_url</tt></dt><dd>A boolean. When <tt>true</tt>, attribution <bcp14>SHOULD</bcp14> preserve or link to the canonical source URL where technically possible.</dd></dl><t>This document does not define an attribution rendering format.</t></section>
+
+    <section anchor="reciprocity"><name>Reciprocity</name><t><tt>reciprocity</tt> is <bcp14>OPTIONAL</bcp14>. When present, it <bcp14>MUST</bcp14> be a JSON object.</t><dl><dt><tt>usage_reporting</tt></dt><dd>The string <tt>requested</tt> indicates that the publisher requests usage reporting when the agent supports such reporting.</dd></dl><t>Version 0.3 does not define a reporting transport, reporting endpoint, mandatory reporting behavior, compensation mechanism, or settlement protocol. <tt>requested</tt> is therefore an informational cooperation request, not an authorization requirement.</t></section>
+
+    <section anchor="robots"><name>Relationship to robots.txt</name><t>HUMIA does not replace REP <xref target="RFC9309"/>.</t><t>A crawler that is subject to REP <bcp14>MUST</bcp14> continue to evaluate and honor <tt>robots.txt</tt> independently of HUMIA. HUMIA does not grant permission to crawl a path that REP disallows.</t><t>Whether REP applies to an agent acting interactively on behalf of a user is outside the scope of this document.</t><section anchor="humia-record"><name>Experimental <tt>Humia:</tt> Record</name><t>A publisher <bcp14>MAY</bcp14> add a line of the following form to <tt>robots.txt</tt>:</t><sourcecode type="text">Humia: https://example.com/.well-known/humia.json</sourcecode><t>For HUMIA-aware implementations, the record name <tt>Humia</tt> is matched case-insensitively. The value <bcp14>MUST</bcp14> be an absolute HTTPS URI.</t><t>The record is an experimental discovery hint only. A HUMIA-aware agent <bcp14>MUST</bcp14> treat the canonical <tt>/.well-known/humia.json</tt> location as authoritative. A <tt>Humia:</tt> value pointing to another origin <bcp14>MUST NOT</bcp14> cause that other origin to control the current origin's HUMIA policy.</t><t>Implementations that do not understand the <tt>Humia:</tt> record can ignore it. Its presence does not alter <tt>User-agent</tt>, <tt>Allow</tt>, or <tt>Disallow</tt> processing defined by REP.</t></section></section>
+
+    <section anchor="human-readable"><name>Human-Readable Presentation</name><t>A publisher tool <bcp14>MAY</bcp14> present a plain-language explanation of the policy in addition to the machine-readable JSON. Such explanations are non-normative. In case of disagreement, the JSON representation is authoritative for HUMIA processing.</t></section>
+
+    <section anchor="security"><name>Security Considerations</name><t>HUMIA is a public policy mechanism and <bcp14>MUST NOT</bcp14> contain passwords, bearer tokens, API keys, private credentials, personal authentication material, or other secrets.</t><t>A HUMIA policy is not an access-control mechanism. Agents <bcp14>MUST NOT</bcp14> use an <tt>allow</tt> value to bypass authentication, authorization, network restrictions, payment requirements, or other controls.</t><t>Publishers should serve HUMIA over HTTPS to protect policy integrity in transit. This specification defines the protocol only for HTTPS origins.</t><t>Agents fetching HUMIA policies should apply normal protections against server-side request forgery, malicious redirects, oversized responses, resource exhaustion, and malicious JSON inputs. Cross-origin redirects are prohibited by this specification to reduce origin-confusion risks.</t><t>A malicious party that gains control of a publisher's origin can alter the HUMIA policy. HUMIA does not attempt to provide security beyond the security properties of HTTPS and control of the origin in version 0.3.</t></section>
+
+    <section anchor="privacy"><name>Privacy Considerations</name><t>Fetching a HUMIA policy can reveal to the publisher that an automated client is interested in the origin, just as fetching other public resources can.</t><t>A HUMIA request does not require an agent to disclose an end user's identity. Implementations <bcp14>SHOULD NOT</bcp14> add user-identifying information to HUMIA discovery requests unless another protocol or explicit user authorization requires it.</t><t>Publishers <bcp14>SHOULD</bcp14> avoid placing personal data in the HUMIA policy. The policy is intended to be public and broadly cacheable.</t></section>
+
+    <section anchor="versioning"><name>Versioning and Extensibility</name><t>The <tt>version</tt> member identifies the HUMIA protocol version used by the representation.</t><t>Version 0.3 intentionally defines a small core. Future versions may define additional objects or members, including agent identity, delegated authority, capabilities, interaction mechanisms, verification, enforcement, and richer reciprocity.</t><t>Unknown members <bcp14>MUST</bcp14> be ignored as specified in <xref target="json-representation"/>. New semantics that would change the meaning of existing members require a new HUMIA version.</t></section>
+
+    <section anchor="iana"><name>IANA Considerations</name><t>This document requests registration in the "Well-Known URIs" registry established by <xref target="RFC8615"/>.</t><dl><dt>URI suffix</dt><dd><tt>humia.json</tt></dd><dt>Change controller</dt><dd>HUMIA Protocol</dd><dt>Specification document</dt><dd>This document.</dd><dt>Status</dt><dd>provisional</dd><dt>Related information</dt><dd><tt>https://humiaprotocol.org/</tt></dd></dl><t>The registered resource is a JSON representation served over HTTPS with media type <tt>application/json</tt>.</t></section>
+
+    <section anchor="implementation-status"><name>Implementation Status</name><t>This section is non-normative and may be removed before publication as an RFC.</t><t>As of August 2026, a public experimental implementation is available at <tt>https://humiaprotocol.org/.well-known/humia.json</tt>, together with a browser-based policy generator that produces a <tt>robots.txt</tt> discovery snippet and a HUMIA JSON policy without requiring an account or backend service.</t><t>Additional pilot deployments are being used to evaluate deployment ergonomics and policy semantics. No claim is made that major AI providers currently implement or honor HUMIA.</t></section>
+
+    <section anchor="acknowledgements"><name>Acknowledgements</name><t>The author thanks the Web and Internet standards communities whose work on HTTP, JSON, well-known URIs, and the Robots Exclusion Protocol makes this experiment possible.</t></section>
+  </middle>
+
+  <back>
+    <references>
+      <name>Normative References</name>
+      <xi:include href="https://bib.ietf.org/public/rfc/bibxml-rfcsubseries/reference.BCP.14.xml"/>
+      <reference anchor="RFC8259" target="https://www.rfc-editor.org/info/rfc8259"><front><title>The JavaScript Object Notation (JSON) Data Interchange Format</title><author fullname="Tim Bray" initials="T." surname="Bray"/><date year="2017" month="December"/></front><seriesInfo name="RFC" value="8259"/></reference>
+      <reference anchor="RFC8615" target="https://www.rfc-editor.org/info/rfc8615"><front><title>Well-Known Uniform Resource Identifiers (URIs)</title><author fullname="Mark Nottingham" initials="M." surname="Nottingham"/><date year="2019" month="May"/></front><seriesInfo name="RFC" value="8615"/></reference>
+      <reference anchor="RFC9110" target="https://www.rfc-editor.org/info/rfc9110"><front><title>HTTP Semantics</title><author fullname="Roy T. Fielding" initials="R." surname="Fielding"/><author fullname="Mark Nottingham" initials="M." surname="Nottingham"/><author fullname="Julian Reschke" initials="J." surname="Reschke"/><date year="2022" month="June"/></front><seriesInfo name="RFC" value="9110"/></reference>
+      <reference anchor="RFC9309" target="https://www.rfc-editor.org/info/rfc9309"><front><title>Robots Exclusion Protocol</title><author fullname="Martijn Koster" initials="M." surname="Koster"/><author fullname="Gary Illyes" initials="G." surname="Illyes"/><author fullname="Henner Zeller" initials="H." surname="Zeller"/><date year="2022" month="September"/></front><seriesInfo name="RFC" value="9309"/></reference>
+    </references>
+    <section anchor="change-log"><name>Change Log</name><section anchor="change-00"><name>draft-treneule-humia-protocol-00</name><t>Initial Internet-Draft version defining HUMIA Protocol v0.3, the <tt>/.well-known/humia.json</tt> resource, the minimal JSON policy model, and the optional experimental <tt>Humia:</tt> discovery record.</t></section></section>
+  </back>
+</rfc>
